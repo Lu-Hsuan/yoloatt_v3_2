@@ -67,9 +67,9 @@ if __name__ == "__main__":
 
         # Get detections
         with torch.no_grad():
-            _,detections,_ = model(input_imgs.to(device),targets.to(device))
+            _,detections,__ = model(input_imgs.to(device),targets.to(device))
             detections = non_max_suppression(detections, opt.conf_thres, opt.nms_thres)
-            # print(f'loss:{_}')
+            print(f'loss:{_}')
             # print(model.yolo_layers[0].metrics)
             # print(model.yolo_layers[1].metrics)
             # print(model.yolo_layers[2].metrics)
@@ -96,9 +96,9 @@ if __name__ == "__main__":
 
         # Get detections
         with torch.no_grad():
-            _,detections,_ = model(input_imgs.to(device),targets.to(device))
+            _,detections,__ = model(input_imgs.to(device),targets.to(device))
             detections = non_max_suppression(detections, opt.conf_thres, opt.nms_thres)
-            #print(f'loss:{_}')
+            print(f'loss:{_}')
             #print(model.yolo_layers[0].metrics)
             #print(model.yolo_layers[1].metrics)
             #print(model.yolo_layers[2].metrics)
