@@ -1,0 +1,68 @@
+/opt/ohpc/admin/lmod/lmod/init/bash: line 71: conda: command not found
+/opt/ohpc/admin/lmod/lmod/init/bash: line 71: conda: command not found
+Message from TWCC HPC admin
+-----------------------
+loading miniconda3 with conda 4.8.4/python 3.7
+docs : https://hackmd.io/@kmo/twcc_hpc_conda
+-----------------------
+
+Namespace(batch_size=32, data_path='../data', debug=False, decay_factor=0.1, decay_step=10, epochs=8, height=224, img_size=416, log_path='epoch_yolo2_test_1', log_period=50, loss_weight=0.0001, lr=0.0005, model_name='yoloatt', multiscale_training=True, no_cuda=False, num_workers=8, obj_names='./coco.names', obj_path='./', save_period=1, see_grad=False, use_yolov3=False, weight='../weights/yoloatt_v3_2_w.pth', width=320)
+Optimizer groups: 92 .bias, 92 Conv2d.weight, 92 other
+Dataset : train, number : 10000
+Dataset : val, number : 5000
+Load Model from ../weights/yoloatt_v3_2_w.pth
+117264 5000
+Epoch: 1 / Batch: 50, Att Loss: 0.597, Obj Loss: 28.723 (process time: 0.841, left time: 00h34m17s)
+val loss: attention: 0.511458694934845, obj: 33.737632751464844
+Epoch: 1 / Batch: 100, Att Loss: 0.464, Obj Loss: 28.786 (process time: 1.265, left time: 00h50m32s)
+val loss: attention: 0.46332669258117676, obj: 31.3117618560791
+Epoch: 1 / Batch: 150, Att Loss: 0.428, Obj Loss: 30.495 (process time: 1.085, left time: 00h42m25s)
+val loss: attention: 0.42885586619377136, obj: 31.750547409057617
+Epoch: 1 / Batch: 200, Att Loss: 0.403, Obj Loss: 29.617 (process time: 1.255, left time: 00h48m01s)
+val loss: attention: 0.42003655433654785, obj: 31.637012481689453
+Epoch: 1 / Batch: 250, Att Loss: 0.387, Obj Loss: 30.130 (process time: 1.091, left time: 00h40m50s)
+val loss: attention: 0.39963430166244507, obj: 35.501949310302734
+Epoch: 1 / Batch: 300, Att Loss: 0.371, Obj Loss: 29.238 (process time: 0.928, left time: 00h33m58s)
+val loss: attention: 0.3880156874656677, obj: 31.76532554626465
+saving epoch_yolo2_test_1/yoloatt/model/weight_1
+Epoch: 2 / Batch: 50, Att Loss: 0.364, Obj Loss: 29.160 (process time: 1.074, left time: 00h38m11s)
+val loss: attention: 0.38601383566856384, obj: 35.54281234741211
+Epoch: 2 / Batch: 100, Att Loss: 0.353, Obj Loss: 29.605 (process time: 1.028, left time: 00h35m43s)
+val loss: attention: 0.37876129150390625, obj: 32.1423454284668
+Epoch: 2 / Batch: 150, Att Loss: 0.344, Obj Loss: 29.210 (process time: 0.976, left time: 00h33m04s)
+val loss: attention: 0.3668172061443329, obj: 35.9023551940918
+Epoch: 2 / Batch: 200, Att Loss: 0.340, Obj Loss: 28.946 (process time: 1.012, left time: 00h33m28s)
+val loss: attention: 0.369277685880661, obj: 36.41384506225586
+Epoch: 2 / Batch: 250, Att Loss: 0.337, Obj Loss: 29.388 (process time: 0.965, left time: 00h31m07s)
+val loss: attention: 0.35318562388420105, obj: 32.37352752685547
+Epoch: 2 / Batch: 300, Att Loss: 0.333, Obj Loss: 30.190 (process time: 0.954, left time: 00h29m57s)
+val loss: attention: 0.3571174144744873, obj: 35.51229476928711
+saving epoch_yolo2_test_1/yoloatt/model/weight_2
+Epoch: 3 / Batch: 50, Att Loss: 0.334, Obj Loss: 30.939 (process time: 0.995, left time: 00h30m13s)
+val loss: attention: 0.35239776968955994, obj: 37.32470703125
+Epoch: 3 / Batch: 100, Att Loss: 0.329, Obj Loss: 29.475 (process time: 1.035, left time: 00h30m34s)
+val loss: attention: 0.3519458770751953, obj: 40.81775665283203
+Epoch: 3 / Batch: 150, Att Loss: 0.326, Obj Loss: 30.857 (process time: 1.116, left time: 00h32m01s)
+val loss: attention: 0.34660351276397705, obj: 32.1311149597168
+Traceback (most recent call last):
+  File "yoloatt_train.py", line 373, in <module>
+    yolo_trainer.train()
+  File "yoloatt_train.py", line 111, in train
+    self.run_epoch()
+  File "yoloatt_train.py", line 157, in run_epoch
+    losses['obj_loss'], _, _ = self.model(imgs, targets)
+  File "/home/luhsuan0223/.conda/envs/torch_a/lib/python3.6/site-packages/torch/nn/modules/module.py", line 532, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/work/luhsuan0223/@yoloatt_v3_2/models.py", line 269, in forward
+    x = module(x)
+  File "/home/luhsuan0223/.conda/envs/torch_a/lib/python3.6/site-packages/torch/nn/modules/module.py", line 532, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/luhsuan0223/.conda/envs/torch_a/lib/python3.6/site-packages/torch/nn/modules/container.py", line 100, in forward
+    input = module(input)
+  File "/home/luhsuan0223/.conda/envs/torch_a/lib/python3.6/site-packages/torch/nn/modules/module.py", line 532, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/luhsuan0223/.conda/envs/torch_a/lib/python3.6/site-packages/torch/nn/modules/activation.py", line 559, in forward
+    return F.leaky_relu(input, self.negative_slope, self.inplace)
+  File "/home/luhsuan0223/.conda/envs/torch_a/lib/python3.6/site-packages/torch/nn/functional.py", line 1063, in leaky_relu
+    result = torch._C._nn.leaky_relu(input, negative_slope)
+RuntimeError: CUDA out of memory. Tried to allocate 50.00 MiB (GPU 0; 31.72 GiB total capacity; 29.34 GiB already allocated; 39.75 MiB free; 30.63 GiB reserved in total by PyTorch)
