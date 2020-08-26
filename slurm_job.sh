@@ -16,5 +16,6 @@ conda activate torch_a
 #python -u yoloatt_train.py --epochs=1 --num_workers=8 --batch_size=8 --log_period=10 --save_period=1 --loss_weight=0.001 --log_path=epoch_yolo_test_2 --weight=./weights/yoloatt_v3_w.pth
 #python -u dect_obj_3_save.py --out_path=./com_yolo_output --image_folder=./data/common_obj.txt --weights_path=./weights/yoloatt_v3_w.pth --batch_size=8
 #python -u yoloatt_train.py --epochs=5 --num_workers=8 --batch_size=8 --log_period=125 --save_period=1 --loss_weight=0.0001 --log_path=epoch_yoloatt_2 --weight=./epoch_yoloatt_1/yoloatt/model/weight_5
-python -u yoloatt_train.py --epochs=8 --num_workers=8 --batch_size=8 --log_period=125 --save_period=1 --loss_weight=0.0001 --log_path=epoch_yolo_test_1 --weight=../weights/yoloatt_v3_2_w.pth
-python -u yoloatt_train.py --epochs=8 --num_workers=8 --batch_size=8 --log_period=1 --save_period=1 --loss_weight=0.0001 --log_path=epoch_yolo_test_1 --weight=../weights/yoloatt_v3_2_w.pth
+#python -u yoloatt_train.py --epochs=8 --num_workers=8 --batch_size=8 --log_period=125 --save_period=1 --loss_weight=0.0001 --log_path=epoch_yolo_test_1 --weight=../weights/yoloatt_v3_2_w.pth
+#python -u yoloatt_train.py --epochs=8 --num_workers=8 --batch_size=8 --log_period=1 --save_period=1 --loss_weight=0.0001 --log_path=epoch_yolo_test_1 --weight=../weights/yoloatt_v3_2_w.pth
+python -u yoloatt_train.py --epochs=8 --num_workers=8 --batch_size=32 --log_period=1 --save_period=1 --loss_weight=0.0001 --log_path=epoch_yolo2_test_1 --weight=../weights/yoloatt_v3_2_w.pth
