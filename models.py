@@ -373,11 +373,12 @@ class Darknet(nn.Module):
 
 if __name__ == "__main__":
     model_ = Darknet("./yoloatt_v3.cfg")
-    d=torch.rand(2,3,224,320)
+    d=torch.rand(2,3,416,416)
     targets = torch.rand((4,6))
-    __,_,npy = model_(d,targets=None)
+    #__,_,npy = model_(d,targets=targets)
+    #l,dec,npy = model_(d,targets=targets)
     #print(l,dec.size(),npy[-1].size())
-    print(npy[-1].size())
+    #print(npy[-1].size())
     w_p = 'D:\!@c++\yoloatt_v3\!weight\yolov3_w.pth'.replace('\\'[0],'/')
     for pth, model in [[w_p, model_]]:
         prepared_dict = torch.load(pth) #437
@@ -386,7 +387,7 @@ if __name__ == "__main__":
         print(list(model_dict.keys()))
         print('a')
         i = 0 
-        for k, v in prepared_dict.items():
+        for k, v in model_dict.items():
             print(i,k)
             i +=1
             if k in model_dict:
