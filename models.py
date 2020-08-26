@@ -375,9 +375,9 @@ if __name__ == "__main__":
     model_ = Darknet("./yoloatt_v3.cfg")
     d=torch.rand(2,3,224,320)
     targets = torch.rand((4,6))
-    #__,_,npy = model_(d,targets=None)
+    __,_,npy = model_(d,targets=None)
     #print(l,dec.size(),npy[-1].size())
-    #print(npy[-1].size())
+    print(npy[-1].size())
     w_p = 'D:\!@c++\yoloatt_v3\!weight\yolov3_w.pth'.replace('\\'[0],'/')
     for pth, model in [[w_p, model_]]:
         prepared_dict = torch.load(pth) #437
@@ -392,7 +392,7 @@ if __name__ == "__main__":
             if k in model_dict:
                 if v.size() == model_dict[k].size():
                     model_dict[k]=v
-                    #print('load')
+                    print('load')
                 else:
                     if("yoloatt.pth" in self.opt.weight):
                         model_dict[k][-2:] = v
@@ -404,4 +404,4 @@ if __name__ == "__main__":
         #'''
         model.load_state_dict(model_dict)
         break
-    torch.save(model_.state_dict(),'yoloatt_v3_2_w.pth')
+    #torch.save(model_.state_dict(),'yoloatt_v3_2_w.pth')
