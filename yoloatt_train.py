@@ -164,6 +164,7 @@ class Trainer:
                 total_loss = losses['total']
                 if(float(losses['total'].cpu().detach().numpy()) < 0.2):
                     self.obj_flag==True
+                    print('Start obj')
             #total_loss = losses['obj_loss']
             ########################################
             if not self.opt.see_grad:
