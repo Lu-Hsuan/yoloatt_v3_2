@@ -60,7 +60,10 @@ if __name__ == "__main__":
     )
     print("\nPerforming object detection:")
     prev_time = time.time()
+    init = 10
     for batch_i, (img_paths, input_imgs, targets) in enumerate(tqdm.tqdm(dataloader, desc="Pre Detecting objects")):
+        if(batch_i < init):
+            continue
     #for batch_i, (img_paths, input_imgs) in enumerate(dataloader):
         # Configure input
         input_imgs = Variable(input_imgs.type(Tensor))
@@ -81,7 +84,7 @@ if __name__ == "__main__":
         imgs.extend(img_paths)
         img_detections_pre.extend(detections)
         # Save image and detections
-        if(batch_i == 5):
+        if(batch_i == 5+init):
             break
     print('load '+opt.weights_path)
     model.load_state_dict(torch.load(opt.weights_path))
@@ -90,6 +93,8 @@ if __name__ == "__main__":
         dataset, batch_size=opt.batch_size, shuffle=False, num_workers=8, collate_fn=dataset.collate_fn
     )
     for batch_i, (img_paths, input_imgs, targets) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
+        if(batch_i < init):
+            continue
     #for batch_i, (img_paths, input_imgs) in enumerate(dataloader):
         # Configure input
         input_imgs = Variable(input_imgs.type(Tensor))
@@ -110,7 +115,7 @@ if __name__ == "__main__":
         #imgs.extend(img_paths)
         img_detections.extend(detections)
         # Save image and detections
-        if(batch_i == 5):
+        if(batch_i == 5+init):
             break
     # try:
     #     os._exit(0)
