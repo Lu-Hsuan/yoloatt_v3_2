@@ -195,7 +195,7 @@ class Trainer:
             if i % self.opt.log_period == 0 and i != 0:
                 for k in log_losses.keys():
                     log_losses[k] /= self.opt.log_period
-                if(float(log_losses['total'].cpu().detach().numpy()) < 0.3):
+                if(float(log_losses['total'].cpu().detach().numpy()) < 0.3 and self.obj_flag==False):
                     self.obj_flag=True
                     print('Start obj')
                     self.model_optimizer = torch.optim.SGD(self.model.parameters(), lr=opt.lr/2, momentum=0.937, nesterov=True)
