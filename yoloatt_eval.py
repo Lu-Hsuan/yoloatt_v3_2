@@ -146,7 +146,7 @@ class Tester:
 if __name__ == '__main__':
     torch.backends.cudnn.deterministic =True
     opt = YOLOATT_OPTION().parse()
-    path = os.path.join(opt.log_path,'output_img')
+    path = os.path.join(opt.log_path,'output_map')
     os.makedirs(path,exist_ok=True)
 
     yolo_trainer = Tester(opt)
