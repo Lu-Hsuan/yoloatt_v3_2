@@ -103,7 +103,7 @@ class Trainer:
         self.val_obj_iter = iter(self.val_obj_dataloader)
         ###################################################################
         print(obj_dataset.__len__(),val_obj_dataset.__len__())
-
+        self.obj_flag = False
     def train(self):
         self.step = 0
         self.epoch = 0
@@ -143,7 +143,7 @@ class Trainer:
             start_time = time()
                 
             outputs, losses = self.process(inputs, cells)
-            if((i)%10==0):
+            if(self.obj_flag==True):
                 ##########################################################
                 try:
                     _, imgs, targets = self.obj_iter.next()
@@ -160,8 +160,10 @@ class Trainer:
                 #print(losses['obj_loss'])
                 total_loss = losses['total'] + self.opt.loss_weight * losses['obj_loss']
             else:
-                losses['obj_loss'] = obj_loss
+                losses['obj_loss'] = 0
                 total_loss = losses['total']
+                if(float(losses['total'].cpu().numpy()) < 0.2):
+                    self.obj_flag==True
             #total_loss = losses['obj_loss']
             ########################################
             if not self.opt.see_grad:
