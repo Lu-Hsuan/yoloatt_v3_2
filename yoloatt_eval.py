@@ -101,29 +101,43 @@ class Tester:
             print("Model weight is None")
             if self.opt.use_yolov3:
                 print("Load YOLOV3_BackBone weight")
-                self.model.load_darknet_weights("./weights/yolov3_darknet53.conv.74")
+                self.model.load_darknet_weights("../weights/yolov3_darknet53.conv.74")
             else:
                 print("Load Darknet weight")
-                self.model.load_darknet_weights("./weights/darknet53.conv.74")
+                self.model.load_darknet_weights("../weights/darknet53.conv.74")
         else:
             print(f"Load Model from {self.opt.weight}")
-            #################################################################################################################
-            for pth, model in [["yoloatt.pth", self.model]]:
-                prepared_dict = torch.load(os.path.join(self.opt.weight, pth))
-                model_dict = model.state_dict()
-                for k, v in prepared_dict.items():
-                    if k in model_dict:
-                        if v.size() == model_dict[k].size():
-                            model_dict[k]=v
-                            #print('load')
+            if(self.opt.weight.endswith('.weights')):
+                self.model.load_darknet_weights(self.opt.weight)
+                
+            if('yoloatt_v3.pth' in self.opt.weight):
+                print('only load model')
+                self.model.load_state_dict(torch.load(self.opt.weight))
+            elif(self.opt.weight.endswith('.pth')):
+                #################################################################################################################
+                for pth, model in [[self.opt.weight, self.model]]:
+                    prepared_dict = torch.load(pth)
+                    model_dict = model.state_dict()
+                    for k, v in prepared_dict.items():
+                        if k in model_dict:
+                            if v.size() == model_dict[k].size():
+                                model_dict[k]=v
+                                #print('load')
+                            else:
+                                if("yoloatt.pth" in self.opt.weight):
+                                    model_dict[k][-2:] = v
+                                else:
+                                    model_dict[k][:-2] = v
+                                #print('output_c')
                         else:
-                            model_dict[k][-2:] = v
-                            #print('output_c')
-                    else:
-                        continue
-                #'''
-                model.load_state_dict(model_dict)
-                break
+                            continue
+                    #'''
+                    model.load_state_dict(model_dict)
+                    break
+            else:
+                print('load model and opti')
+                self.model.load_state_dict(torch.load(self.opt.weight+'/yoloatt_v3.pth'))
+                #self.model_optimizer.load_state_dict(torch.load(self.opt.weight+'/sgd.pth'))
 
 if __name__ == '__main__':
     torch.backends.cudnn.deterministic =True
