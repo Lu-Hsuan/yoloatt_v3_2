@@ -103,7 +103,8 @@ class Trainer:
         self.val_obj_iter = iter(self.val_obj_dataloader)
         ###################################################################
         print(obj_dataset.__len__(),val_obj_dataset.__len__())
-        self.obj_flag = False
+        self.obj_flag = True
+
     def train(self):
         self.step = 0
         self.epoch = 0
@@ -143,25 +144,25 @@ class Trainer:
             start_time = time()
                 
             outputs, losses = self.process(inputs, cells)
-            if(self.obj_flag==True):
+            #if((i)%1==0):
                 ##########################################################
-                try:
-                    _, imgs, targets = self.obj_iter.next()
-                except StopIteration:
-                    print('Re')
-                    self.obj_iter = iter(self.obj_dataloader)
-                    _, imgs, targets = self.obj_iter.next()
+            try:
+                _, imgs, targets = self.obj_iter.next()
+            except StopIteration:
+                print('Re')
+                self.obj_iter = iter(self.obj_dataloader)
+                _, imgs, targets = self.obj_iter.next()
 
-                imgs = imgs.to(self.device)
-                targets = targets.to(self.device)
-                losses['obj_loss'], _, _ = self.model(imgs, targets)
-                obj_loss = losses['obj_loss']
-                ##########################################################
-                #print(losses['obj_loss'])
-                total_loss = losses['total'] + self.opt.loss_weight * losses['obj_loss']
-            else:
-                losses['obj_loss'] = 0
-                total_loss = losses['total']
+            imgs = imgs.to(self.device)
+            targets = targets.to(self.device)
+            losses['obj_loss'], _, _ = self.model(imgs, targets)
+            #obj_loss = losses['obj_loss']
+            ##########################################################
+            #print(losses['obj_loss'])
+            total_loss = losses['total'] + self.opt.loss_weight * losses['obj_loss']
+            #else:
+            #    losses['obj_loss'] = obj_loss
+            #    total_loss = losses['total']
             #total_loss = losses['obj_loss']
             ########################################
             if not self.opt.see_grad:
@@ -195,12 +196,12 @@ class Trainer:
             if i % self.opt.log_period == 0 and i != 0:
                 for k in log_losses.keys():
                     log_losses[k] /= self.opt.log_period
-                if(float(log_losses['total'].cpu().detach().numpy()) < 0.2 and self.obj_flag==False):
-                    self.obj_flag=True
-                    print('Start obj')
-                    self.model_optimizer = torch.optim.SGD(self.model.parameters(), lr=opt.lr/2, momentum=0.937, nesterov=True)
-                    self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
-                                    self.model_optimizer, self.opt.decay_step, self.opt.decay_factor)
+                #if(float(log_losses['total'].cpu().detach().numpy()) < 0.25 and self.obj_flag==False):
+                #    self.obj_flag=True
+                #    print('Start obj')
+                    #self.model_optimizer = torch.optim.SGD(self.model.parameters(), lr=opt.lr/2, momentum=0.937, nesterov=True)
+                    #self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
+                    #                self.model_optimizer, self.opt.decay_step, self.opt.decay_factor)
 
                 self.log('train', inputs, cells, outputs, log_losses)
 
@@ -334,7 +335,11 @@ class Trainer:
             print(f"Load Model from {self.opt.weight}")
             if(self.opt.weight.endswith('.weights')):
                 self.model.load_darknet_weights(self.opt.weight)
-            if(self.opt.weight.endswith('.pth')):
+                
+            if('yoloatt_v3.pth' in self.opt.weight):
+                print('only load model')
+                self.model.load_state_dict(torch.load(self.opt.weight))
+            elif(self.opt.weight.endswith('.pth')):
                 #################################################################################################################
                 for pth, model in [[self.opt.weight, self.model]]:
                     prepared_dict = torch.load(pth)
