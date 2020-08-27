@@ -73,7 +73,7 @@ class Tester:
                 i += 1
                 NN += N
                 print(i,end='\n')
-                img_s = img_.cpu().numpy()
+                img_s = img_[-1].cpu().numpy()
                 img_s = np.moveaxis(img_s,[0,1,2],[2,0,1])
                 print(img_s.shape)
                 img_sa = np.concatenate([img_s,map_g[-1]*np.array([255,255,255]),map_p[-1]*np.array([255,255,255])],axis=1)
