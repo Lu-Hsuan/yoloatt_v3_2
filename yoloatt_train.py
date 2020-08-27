@@ -32,7 +32,7 @@ class Trainer:
         self.device = 'cuda' if not self.opt.no_cuda else 'cpu'
         self.model = Darknet("./yoloatt_v3.cfg")
         self.model.to(self.device)
-        #self.model_optimizer = torch.optim.Adam(self.model.parameters(), self.opt.lr)
+        self.model_optimizer = torch.optim.Adam(self.model.parameters(), self.opt.lr)
         #'''
         pg0, pg1, pg2 = [], [], []  # optimizer parameter groups
         for k, v in dict(self.model.named_parameters()).items():
@@ -42,7 +42,7 @@ class Trainer:
                 pg1 += [v]  # apply weight_decay
             else:
                 pg0 += [v]  # all else
-        self.model_optimizer = torch.optim.SGD(self.model.parameters(), lr=opt.lr, momentum=0.937, nesterov=True)
+        #self.model_optimizer = torch.optim.SGD(self.model.parameters(), lr=opt.lr, momentum=0.937, nesterov=True)
         #self.model_optimizer.add_param_group({'params': pg1}) #, 'weight_decay': 0.5})  # add pg1 with weight_decay
         #self.model_optimizer.add_param_group({'params': pg2})  # add pg2 (biases)
         print('Optimizer groups: %g .bias, %g Conv2d.weight, %g other' % (len(pg2), len(pg1), len(pg0)))
@@ -162,9 +162,6 @@ class Trainer:
             else:
                 losses['obj_loss'] = 0
                 total_loss = losses['total']
-                if(float(losses['total'].cpu().detach().numpy()) < 0.2):
-                    self.obj_flag==True
-                    print('Start obj')
             #total_loss = losses['obj_loss']
             ########################################
             if not self.opt.see_grad:
@@ -198,6 +195,13 @@ class Trainer:
             if i % self.opt.log_period == 0 and i != 0:
                 for k in log_losses.keys():
                     log_losses[k] /= self.opt.log_period
+                if(float(log_losses['total'].cpu().detach().numpy()) < 0.3):
+                    self.obj_flag=True
+                    print('Start obj')
+                    self.model_optimizer = torch.optim.SGD(self.model.parameters(), lr=opt.lr/2, momentum=0.937, nesterov=True)
+                    self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
+                                    self.model_optimizer, self.opt.decay_step, self.opt.decay_factor)
+
                 self.log('train', inputs, cells, outputs, log_losses)
 
                 left_time = int((self.total_train - self.step) * duration)
