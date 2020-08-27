@@ -162,7 +162,7 @@ class Trainer:
             else:
                 losses['obj_loss'] = 0
                 total_loss = losses['total']
-                if(float(losses['total'].cpu().numpy()) < 0.2):
+                if(float(losses['total'].cpu().detach().numpy()) < 0.2):
                     self.obj_flag==True
             #total_loss = losses['obj_loss']
             ########################################
