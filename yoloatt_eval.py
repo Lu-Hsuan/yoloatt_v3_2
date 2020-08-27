@@ -77,8 +77,8 @@ class Tester:
                 img_s = np.moveaxis(img_s,[0,1,2],[2,0,1])
                 img_s = cv2.resize(img_s,(self.tar_shape_c,self.tar_shape_r))
                 
-                map_g = map_g[-1]*np.array([255,255,255])
-                map_p = map_p[-1]*np.array([255,255,255])
+                map_g = map_g[-1,np.newaxis]*np.array([255,255,255])
+                map_p = map_p[-1,np.newaxis]*np.array([255,255,255])
                 print(img_s.shape , map_g.shape, map_p.shape)
                 img_sa = np.concatenate([img_s,map_g,map_p],axis=1)
                 cv2.imwrite(f'{os.path.join(opt.log_path,"output_map")}/{img_nr[-1]}.png',np.round(img_sa))
