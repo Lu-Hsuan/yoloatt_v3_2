@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     # Set up model
     model = Darknet(opt.model_def, img_size=opt.img_size).to(device)
-    init_w ='../weights/yoloatt_v3_2_w.pth'
+    init_w ='../weights/yoloatt_v3_1_w.pth'
     model.load_state_dict(torch.load(init_w))
     model.eval()  # Set in evaluation mode
     classes = load_classes(opt.class_path)  # Extracts class labels from file

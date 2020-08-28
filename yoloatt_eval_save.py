@@ -87,13 +87,13 @@ class Tester:
             if(self.opt.weight.endswith('.weights')):
                 self.model.load_darknet_weights(self.opt.weight)
                 
-            if('yoloatt_v3.pth' in self.opt.weight):
+            elif(self.opt.weight.endswith('.pth')):
                 print('only load model')
                 self.model.load_state_dict(torch.load(self.opt.weight))
             else:
                 print('load model')
-                self.model.load_state_dict(torch.load(self.opt.weight+'/yoloatt_v3.pth'))
-                #self.model_optimizer.load_state_dict(torch.load(self.opt.weight+'/sgd.pth'))
+                self.model.load_state_dict(torch.load(self.opt.weight+'/yoloatt_v3_1.pth'))
+                self.model_optimizer.load_state_dict(torch.load(self.opt.weight+'/adam.pth'))
 
 if __name__ == '__main__':
     torch.backends.cudnn.deterministic =True

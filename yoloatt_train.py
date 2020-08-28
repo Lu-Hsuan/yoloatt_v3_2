@@ -158,10 +158,11 @@ class Trainer:
             imgs = imgs.to(self.device)
             targets = targets.to(self.device)
             losses['obj_loss'], _, _ = self.model(imgs, targets)
+            
+            total_loss = losses['total'] + self.opt.loss_weight * losses['obj_loss']
             #obj_loss = losses['obj_loss']
             ##########################################################
             #print(losses['obj_loss'])
-            total_loss = losses['total'] + self.opt.loss_weight * losses['obj_loss']
             #else:
             #    losses['obj_loss'] = obj_loss
             #    total_loss = losses['total']
@@ -198,12 +199,6 @@ class Trainer:
             if i % self.opt.log_period == 0 and i != 0:
                 for k in log_losses.keys():
                     log_losses[k] /= self.opt.log_period
-                #if(float(log_losses['total'].cpu().detach().numpy()) < 0.25 and self.obj_flag==False):
-                #    self.obj_flag=True
-                #    print('Start obj')
-                    #self.model_optimizer = torch.optim.SGD(self.model.parameters(), lr=opt.lr/2, momentum=0.937, nesterov=True)
-                    #self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
-                    #                self.model_optimizer, self.opt.decay_step, self.opt.decay_factor)
 
                 self.log('train', inputs, cells, outputs, log_losses)
 
@@ -317,10 +312,10 @@ class Trainer:
         
         print(f"saving {path}")
 
-        save_path = os.path.join(path, "yoloatt_v3.pth")
+        save_path = os.path.join(path, "yoloatt_v3_1.pth")
         torch.save(self.model.state_dict(), save_path)
 
-        save_path = os.path.join(path, "sgd.pth")
+        save_path = os.path.join(path, "adam.pth")
         torch.save(self.model_optimizer.state_dict(), save_path)
 
 
@@ -338,13 +333,13 @@ class Trainer:
             if(self.opt.weight.endswith('.weights')):
                 self.model.load_darknet_weights(self.opt.weight)
                 
-            if('yoloatt_v3.pth' in self.opt.weight):
+            elif(self.opt.weight.endswith('.pth')):
                 print('only load model')
                 self.model.load_state_dict(torch.load(self.opt.weight))
             else:
                 print('load model and opti')
-                self.model.load_state_dict(torch.load(self.opt.weight+'/yoloatt_v3.pth'))
-                self.model_optimizer.load_state_dict(torch.load(self.opt.weight+'/sgd.pth'))
+                self.model.load_state_dict(torch.load(self.opt.weight+'/yoloatt_v3_1.pth'))
+                self.model_optimizer.load_state_dict(torch.load(self.opt.weight+'/adam.pth'))
             #################################################################################################################
 if __name__ == '__main__':
 
