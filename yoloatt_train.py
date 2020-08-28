@@ -57,9 +57,9 @@ class Trainer:
 
         
         self.train_dataloader = DataLoader(train_dataset, self.opt.batch_size, num_workers=self.opt.num_workers,
-                                            shuffle=True, pin_memory=True, drop_last=True)
+                                            shuffle=False, pin_memory=True, drop_last=True)
         self.val_dataloader = DataLoader(val_dataset, self.opt.batch_size, num_workers=self.opt.num_workers,
-                                            shuffle=True, pin_memory=True, drop_last=True)
+                                            shuffle=False, pin_memory=True, drop_last=True)
         self.val_iter = iter(self.val_dataloader)
 
         self.total_train = self.train_dataloader.__len__() * self.opt.epochs
@@ -227,7 +227,7 @@ class Trainer:
     def val(self):
         self.model.eval()
         loss_mean = {'0': 0., '1': 0., '2': 0., 'total': 0., 'obj_loss': 0.}
-        t = 10
+        t = 1
         for i in range(0,t):
             try:
                 inputs, cells = self.val_iter.next()
