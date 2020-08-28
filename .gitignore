@@ -4,4 +4,6 @@
 *.ai
 *.zip
 *.rar
+*.pyc
 newcode/*
+model_2_version/*
