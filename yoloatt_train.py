@@ -104,6 +104,7 @@ class Trainer:
         ###################################################################
         print(obj_dataset.__len__(),val_obj_dataset.__len__())
         self.obj_flag = True
+        print('lr = ',self.model_optimizer.param_groups[0]['lr'])
 
     def train(self):
         self.step = 0
