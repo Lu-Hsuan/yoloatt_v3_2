@@ -38,21 +38,23 @@ class SALCell_Dataset(Dataset):
         #print(img_nr)
         img_file = os.path.join(self.img_p, img_nr + '.jpg')
         img_i = cv2.imread(str(img_file))
-        img_i = cv2.cvtColor(img_i,cv2.COLOR_BGR2RGB)
+        img_i = cv2.cvtColor(img_i,cv2.COLOR_BGR2RGB).copy()
         if(self.flip == True):
             prob = np.random.randint(0,2)
+            print(prob)
             if(prob == 1):
                 img_i = np.flip(img_i,1)
                 print(img_i.shape)
-        img_i = self.transform(img_i)
+        img_i = self.transform(img_i.copy())
 
         cells_file = [[], [], []]
         for i in range(3):
             cells_file_temp = np.load(os.path.join(self.cell_p, str(i+1), img_nr + '.npy')) # from low to high resolution
             if(self.flip == True):
                 if(prob == 1):
-                    cells_file_temp = np.flip(cells_file_temp,1)
-            cells_file[i] = cells_file_temp
+                    cells_file_temp = np.flip(cells_file_temp.copy(),2)
+                    print(cells_file_temp.shape)
+            cells_file[i] = cells_file_temp.copy()
 
         if self.with_map:
             map_file = os.path.join(self.map_p, img_nr + '.jpg')
