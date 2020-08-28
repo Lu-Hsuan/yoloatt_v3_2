@@ -143,7 +143,7 @@ class Tester:
                     model.load_state_dict(model_dict)
                     break
             else:
-                print('load model and opti')
+                print('load model')
                 self.model.load_state_dict(torch.load(self.opt.weight+'/yoloatt_v3.pth'))
                 #self.model_optimizer.load_state_dict(torch.load(self.opt.weight+'/sgd.pth'))
 
