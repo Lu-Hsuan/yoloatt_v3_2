@@ -8,7 +8,7 @@ from torchvision import transforms
 
 class SALCell_Dataset(Dataset):
 
-    def __init__(self, data_path, phase, shape_r, shape_c,flip=False, with_map=False):
+    def __init__(self, data_path, phase, shape_r, shape_c,flip=True, with_map=False):
         self.phase = phase
         self.shape_r = shape_r
         self.shape_c = shape_c
@@ -27,7 +27,7 @@ class SALCell_Dataset(Dataset):
                         ])
 
         print(f'Dataset : {self.phase}, number : {self.__len__()}')
-
+        self.flip = flip
     def __getitem__(self, index):
         ##############################################
         # 1. Read from file (using numpy.fromfile, PIL.Image.open)
@@ -39,7 +39,7 @@ class SALCell_Dataset(Dataset):
         img_file = os.path.join(self.img_p, img_nr + '.jpg')
         img_i = cv2.imread(str(img_file))
         img_i = cv2.cvtColor(img_i,cv2.COLOR_BGR2RGB)
-        if(flip == True):
+        if(self.flip == True):
             prob = np.random.randint(0,2)
             if(prob == 1):
                 img_i = np.flip(img_i,1)
@@ -48,11 +48,11 @@ class SALCell_Dataset(Dataset):
         cells_file = [[], [], []]
         for i in range(3):
             cells_file_temp = np.load(os.path.join(self.cell_p, str(i+1), img_nr + '.npy')) # from low to high resolution
-            if(flip == True):
+            if(self.flip == True):
                 if(prob == 1):
                     cells_file_temp = np.flip(cells_file_temp,1)
             cells_file[i] = cells_file_temp
-            
+
         if self.with_map:
             map_file = os.path.join(self.map_p, img_nr + '.jpg')
             map_i = cv2.imread(str(map_file))
