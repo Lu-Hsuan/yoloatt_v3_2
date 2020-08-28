@@ -43,6 +43,7 @@ class SALCell_Dataset(Dataset):
             prob = np.random.randint(0,2)
             if(prob == 1):
                 img_i = np.flip(img_i,1)
+                print(img_i.shape)
         img_i = self.transform(img_i)
 
         cells_file = [[], [], []]
