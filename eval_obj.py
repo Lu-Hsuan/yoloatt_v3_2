@@ -60,7 +60,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=16, help="size of each image batch")
     parser.add_argument("--model_def", type=str, default="./yoloatt_v3.cfg", help="path to model definition file")
     parser.add_argument("--data_path", type=str, default="../data/coco/5k.txt", help="path to data config file")
-    parser.add_argument("--weights_path", type=str, default="../weights/yoloatt_v3_2_w.pth", help="path to weights file")
+    parser.add_argument("--weights_path", type=str, default="../weights/yoloatt_v3_1_w.pth", help="path to weights file")
     parser.add_argument("--class_path", type=str, default="./coco.names", help="path to class label file")
     parser.add_argument("--iou_thres", type=float, default=0.5, help="iou threshold required to qualify as detected")
     parser.add_argument("--conf_thres", type=float, default=0.001, help="object confidence threshold")
