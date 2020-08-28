@@ -6,3 +6,4 @@
 *.cpython-36.pyc
 newcode/*
 /model_2_version/*
+/!img/*
