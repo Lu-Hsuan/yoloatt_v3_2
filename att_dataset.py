@@ -18,6 +18,7 @@ class SALCell_Dataset(Dataset):
         self.map_p = os.path.join(data_path, 'maps',self.phase)
         self.cell_p = os.path.join(data_path,'map_mean' ,self.phase)
         self.file_ = os.listdir(self.img_p)
+        self.file_.sort(key=lambda x: int(x.split('.')[0].split('_')[2]))
         self.transform = transforms.Compose([ 
                             transforms.ToPILImage(),
                             transforms.Resize((shape_r, shape_c),interpolation=cv2.INTER_LINEAR),
@@ -37,6 +38,7 @@ class SALCell_Dataset(Dataset):
         img_nr = self.file_[index].split('.')[0]
         #print(img_nr)
         img_file = os.path.join(self.img_p, img_nr + '.jpg')
+        #print(img_file)
         img_i = cv2.imread(str(img_file))
         img_i = cv2.cvtColor(img_i,cv2.COLOR_BGR2RGB)
         if(self.flip == True):

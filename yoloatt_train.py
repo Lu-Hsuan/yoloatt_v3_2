@@ -57,9 +57,9 @@ class Trainer:
 
         
         self.train_dataloader = DataLoader(train_dataset, self.opt.batch_size, num_workers=self.opt.num_workers,
-                                            shuffle=False, pin_memory=True, drop_last=True)
+                                            shuffle=True, pin_memory=True, drop_last=True)
         self.val_dataloader = DataLoader(val_dataset, self.opt.batch_size, num_workers=self.opt.num_workers,
-                                            shuffle=False, pin_memory=True, drop_last=True)
+                                            shuffle=True, pin_memory=True, drop_last=True)
         self.val_iter = iter(self.val_dataloader)
 
         self.total_train = self.train_dataloader.__len__() * self.opt.epochs
