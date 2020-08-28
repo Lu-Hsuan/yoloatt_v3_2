@@ -41,10 +41,10 @@ class SALCell_Dataset(Dataset):
         img_i = cv2.cvtColor(img_i,cv2.COLOR_BGR2RGB)
         if(self.flip == True):
             prob = np.random.randint(0,2)
-            print(prob)
+            #print(prob)
             if(prob == 1):
                 img_i = np.flip(img_i,1)
-                print(img_i.shape)
+                #print(img_i.shape)
         img_i = self.transform(img_i)
 
         cells_file = [[], [], []]
@@ -53,7 +53,7 @@ class SALCell_Dataset(Dataset):
             if(self.flip == True):
                 if(prob == 1):
                     cells_file_temp = np.flip(cells_file_temp,2)
-                    print(cells_file_temp.shape)
+                    #print(cells_file_temp.shape)
             cells_file[i] = cells_file_temp.copy()
 
         if self.with_map:
