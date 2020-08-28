@@ -53,7 +53,7 @@ class Trainer:
 
 
         train_dataset = SALCell_Dataset(self.opt.data_path, "train", self.opt.height, self.opt.width)
-        val_dataset = SALCell_Dataset(self.opt.data_path, "val", self.opt.height, self.opt.width)
+        val_dataset = SALCell_Dataset(self.opt.data_path, "val", self.opt.height, self.opt.width,flip=False)
 
         
         self.train_dataloader = DataLoader(train_dataset, self.opt.batch_size, num_workers=self.opt.num_workers,
