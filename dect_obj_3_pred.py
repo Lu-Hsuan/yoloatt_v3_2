@@ -60,7 +60,7 @@ if __name__ == "__main__":
     )
     print("\nPerforming object detection:")
     prev_time = time.time()
-    init = 10
+    init = 0
     for batch_i, (img_paths, input_imgs, targets) in enumerate(tqdm.tqdm(dataloader, desc="Pre Detecting objects")):
         if(batch_i < init):
             continue
