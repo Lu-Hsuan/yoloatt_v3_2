@@ -27,7 +27,7 @@ model.load_state_dict(torch.load(weights_path))
 #torch.save(model.state_dict(),'yolov3_w.pth')
 '''
 model_def_ = 'yoloatt_v3_1.cfg'
-weights_path_ = 'yoloatt_v3_2.pth'
+weights_path_ = 'yoloatt_v3_2.pth' #model2 weight (epoch5)
 model_ = models.Darknet(model_def_, img_size=416).to(device)
 
 for pth, model_a in [[weights_path_, model_]]:

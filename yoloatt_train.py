@@ -52,8 +52,8 @@ class Trainer:
                                     self.model_optimizer, self.opt.decay_step, self.opt.decay_factor)
 
 
-        train_dataset = SALCell_Dataset(self.opt.data_path, "train", self.opt.height, self.opt.width)
-        val_dataset = SALCell_Dataset(self.opt.data_path, "val", self.opt.height, self.opt.width,flip=False)
+        train_dataset = SALCell_Dataset(self.opt.data_path, "train", self.opt.height, self.opt.width,augment=True)
+        val_dataset = SALCell_Dataset(self.opt.data_path, "val", self.opt.height, self.opt.width,augment=False)
 
         
         self.train_dataloader = DataLoader(train_dataset, self.opt.batch_size, num_workers=self.opt.num_workers,
@@ -272,9 +272,9 @@ class Trainer:
         losses = {'total': 0.}
         for i, (pred, target) in enumerate(zip(preds, targets)):
             losses[f'{i}'] = nn.BCELoss()(pred, target)
-            losses['total'] += losses[f'{i}']# / (2 ** (2 - i))   # preds size: 1/32, 1/16, 1/8 => the smaller resolution get smaller weight
+            losses['total'] += losses[f'{i}']/ (2 ** (2 - i))   # preds size: 1/32, 1/16, 1/8 => the smaller resolution get smaller weight
 
-        losses['total'] /= (len(losses.keys()) - 1)
+        #losses['total'] /= (len(losses.keys()) - 1)
         return losses
 
 
