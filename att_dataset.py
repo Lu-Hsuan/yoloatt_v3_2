@@ -90,7 +90,7 @@ class SALCell_Dataset(Dataset):
             #print(prob_n)
             if(prob_n == 1):
                 img_i = self.GaussianNoise(img_i)
-        print(img_nr,'noise',prob_n,'flip',prob_f)
+        #print(img_nr,'noise',prob_n,'flip',prob_f)
         return img_i, cells_file
 
     def __len__(self):
