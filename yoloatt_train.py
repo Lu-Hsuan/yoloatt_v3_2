@@ -32,24 +32,8 @@ class Trainer:
         self.device = 'cuda' if not self.opt.no_cuda else 'cpu'
         self.model = Darknet("./yoloatt_v3_2.cfg")
         self.model.to(self.device)
-        # Fix weight about yolo 0-106
-        for name, module in self.model.named_modules():
-            #module
-            #print('children module:', name)
-            if(len(name.split('.'))>=3):
-                if(int(name.split('.')[1])<107):
-                    module.eval()
-                    for param in module.parameters():
-                        #print(k)
-                        param.requires_grad = False
-        self.para_train = []
-        for k, v in dict(self.model.named_parameters()).items():
-            if(len(k.split('.'))>=3):
-                if(int(k.split('.')[1])>=107):
-                    self.para_train.append(v)
-                    #print(k)
-                    #print(v.requires_grad)
-        self.model_optimizer = torch.optim.Adam(self.para_train, self.opt.lr)
+        
+        self.model_optimizer = torch.optim.Adam(self.model.parameters(), self.opt.lr)
         self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
                                     self.model_optimizer, self.opt.decay_step, self.opt.decay_factor)
 
