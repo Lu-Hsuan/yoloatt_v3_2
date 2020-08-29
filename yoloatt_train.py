@@ -30,24 +30,26 @@ class Trainer:
         print(self.opt)
 
         self.device = 'cuda' if not self.opt.no_cuda else 'cpu'
-        self.model = Darknet("./yoloatt_v3.cfg")
+        self.model = Darknet("./yoloatt_v3_2.cfg")
         self.model.to(self.device)
-        self.model_optimizer = torch.optim.Adam(self.model.parameters(), self.opt.lr)
-        #'''
-        pg0, pg1, pg2 = [], [], []  # optimizer parameter groups
+        # Fix weight about yolo 0-106
+        for name, module in self.model.named_modules():
+            #module
+            #print('children module:', name)
+            if(len(name.split('.'))>=3):
+                if(int(name.split('.')[1])<107):
+                    module.eval()
+                    for param in module.parameters():
+                        #print(k)
+                        param.requires_grad = False
+        self.para_train = []
         for k, v in dict(self.model.named_parameters()).items():
-            if '.bias' in k:
-                pg2 += [v]  # biases
-            elif 'conv' in k:
-                pg1 += [v]  # apply weight_decay
-            else:
-                pg0 += [v]  # all else
-        #self.model_optimizer = torch.optim.SGD(self.model.parameters(), lr=opt.lr, momentum=0.937, nesterov=True)
-        #self.model_optimizer.add_param_group({'params': pg1}) #, 'weight_decay': 0.5})  # add pg1 with weight_decay
-        #self.model_optimizer.add_param_group({'params': pg2})  # add pg2 (biases)
-        print('Optimizer groups: %g .bias, %g Conv2d.weight, %g other' % (len(pg2), len(pg1), len(pg0)))
-        #del pg0, pg1, pg2
-        #'''
+            if(len(k.split('.'))>=3):
+                if(int(k.split('.')[1])>=107):
+                    self.para_train.append(v)
+                    #print(k)
+                    #print(v.requires_grad)
+        self.model_optimizer = torch.optim.Adam(self.para_train, self.opt.lr)
         self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
                                     self.model_optimizer, self.opt.decay_step, self.opt.decay_factor)
 

@@ -9,9 +9,6 @@ import numpy as np
 from utils.parse_config import *
 from utils.utils import build_targets, to_cpu, non_max_suppression
 
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-
 
 def create_modules(module_defs):
     """
@@ -22,7 +19,7 @@ def create_modules(module_defs):
     module_list = nn.ModuleList()
     for module_i, module_def in enumerate(module_defs):
         modules = nn.Sequential()
-        # print(module_i, module_def)
+
         if module_def["type"] == "convolutional":
             bn = int(module_def["batch_normalize"])
             filters = int(module_def["filters"])
@@ -76,20 +73,6 @@ def create_modules(module_defs):
             # Define detection layer
             yolo_layer = YOLOLayer(anchors, num_classes, img_size)
             modules.add_module(f"yolo_{module_i}", yolo_layer)
-
-        elif module_def["type"] == "depth":
-            filters = 1
-            modules.add_module(
-                f"depth_{module_i}",
-                nn.Conv2d(
-                    in_channels=output_filters[-1],
-                    out_channels=2,
-                    kernel_size=3,
-                    stride=1,
-                    padding=1,
-                    bias=0
-                )
-            )
         # Register module list and number of output filters
         module_list.append(modules)
         output_filters.append(filters)
@@ -147,12 +130,16 @@ class YOLOLayer(nn.Module):
         self.anchor_h = self.scaled_anchors[:, 1:2].view((1, self.num_anchors, 1, 1))
 
     def forward(self, x, targets=None, img_dim=None):
-        # Tensors for cuda support
-
+        ################################################
+        att = torch.sigmoid(x[:, -2:])
 
         if targets is None:
-            return None, None
+            return att, None
 
+        x = x [:, :-2]
+        #print(x.size())
+        ################################################
+        # Tensors for cuda support
         FloatTensor = torch.cuda.FloatTensor if x.is_cuda else torch.FloatTensor
         LongTensor = torch.cuda.LongTensor if x.is_cuda else torch.LongTensor
         ByteTensor = torch.cuda.ByteTensor if x.is_cuda else torch.ByteTensor
@@ -194,6 +181,7 @@ class YOLOLayer(nn.Module):
             ),
             -1,
         )
+        #print(output.size())
 
         ##########################################################################################
 
@@ -204,7 +192,8 @@ class YOLOLayer(nn.Module):
             anchors=self.scaled_anchors,
             ignore_thres=self.ignore_thres,
         )
-        
+        #obj_mask = obj_mask.bool()
+        #noobj_mask = noobj_mask.bool()
         # Loss : Mask outputs to ignore non-existing objects (except with conf. loss)
         loss_x = self.mse_loss(x[obj_mask], tx[obj_mask])
         loss_y = self.mse_loss(y[obj_mask], ty[obj_mask])
@@ -263,7 +252,7 @@ class Darknet(nn.Module):
     def forward(self, x, targets=None):
         img_dim = x.shape[2]
         loss = 0
-        layer_outputs, yolo_outputs, depth_outputs = [], [], []
+        layer_outputs, yolo_outputs = [], []
         for i, (module_def, module) in enumerate(zip(self.module_defs, self.module_list)):
             if module_def["type"] in ["convolutional", "upsample", "maxpool"]:
                 x = module(x)
@@ -273,22 +262,20 @@ class Darknet(nn.Module):
                 layer_i = int(module_def["from"])
                 x = layer_outputs[-1] + layer_outputs[layer_i]
             elif module_def["type"] == "yolo":
-                x, layer_loss = module[0](x, targets, img_dim)               
+                ##################################################
+                x, layer_loss = module[0](x, targets, img_dim)
+                
                 if layer_loss is not None:
                     loss += layer_loss
                 yolo_outputs.append(x)
-            elif module_def["type"] == "depth":
-                x = torch.sigmoid(module(x))
-                depth_outputs.append(x)
-
+                ##################################################
             layer_outputs.append(x)
-
         
         if targets is None:
-            return None, yolo_outputs, depth_outputs
+            return None,None,yolo_outputs
         else:
             yolo_outputs = to_cpu(torch.cat(yolo_outputs, 1))
-            return loss, yolo_outputs, depth_outputs
+            return loss, yolo_outputs,None
 
     def load_darknet_weights(self, weights_path):
         """Parses and loads the weights stored in 'weights_path'"""
@@ -372,34 +359,21 @@ class Darknet(nn.Module):
         fp.close()
 
 if __name__ == "__main__":
-    # def fix_bn(m):
-    #     classname = m.__class__.__name__
-    #     print(classname)
-    #     if classname.find('BatchNorm') != -1:
-    #         print('fix')
-    #         m.eval()
-    #         for k,param in m.name_parameters().items():
-    #             print(k)
-    #             param.requires_grad = False
-    # #model.apply(fix_bn)
-
-    model = Darknet("./yoloatt_v3_2.cfg")
-    for name, module in model.named_modules():
-        #module
-        print('children module:', name)
-        if(len(name.split('.'))>=3):
-            if(int(name.split('.')[1])<107):
-                module.eval()
-                for param in module.parameters():
-                    #print(k)
-                    param.requires_grad = False
-
+    def fix_bn(m):
+        classname = m.__class__.__name__
+        print(classname)
+        if classname.find('BatchNorm') != -1:
+            print('fix')
+            m.eval()
+            for param in m.parameters():
+                param.requires_grad = False
+    model = Darknet("./yoloatt_v3.cfg")
+    model.apply(fix_bn)
+    #for para in model.parameters():
     for k, v in dict(model.named_parameters()).items():
-        #if('batch_norm' in k):
-        if(len(k.split('.'))>=3):
-            if(int(k.split('.')[1])>=107):
-                print(k)
-                print(v.requires_grad)
+        if('batch_norm' in k):
+            print(k)
+            print(v.requires_grad)
     
     # d=torch.rand(2,3,416,416)
     # targets = torch.rand((4,6))
