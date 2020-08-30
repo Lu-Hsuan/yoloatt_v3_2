@@ -223,7 +223,7 @@ class Trainer:
     def val(self):
         self.model.eval()
         loss_mean = {'0': 0., '1': 0., '2': 0., 'total': 0., 'obj_loss': 0.}
-        t = 10
+        t = 30
         for i in range(0,t):
             try:
                 inputs, cells = self.val_iter.next()
