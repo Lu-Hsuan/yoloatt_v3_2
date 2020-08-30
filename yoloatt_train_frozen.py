@@ -232,18 +232,23 @@ class Trainer:
                 inputs, cells = self.val_iter.next()
 
             ################################################################
-            try:
-                _, imgs, targets = self.val_obj_iter.next()
-            except StopIteration:
-                self.val_obj_iter = iter(self.val_obj_dataloader)
-                _, imgs, targets = self.val_obj_iter.next()
+            if((i % 3) == 0):
+                try:
+                    _, imgs, targets = self.val_obj_iter.next()
+                except StopIteration:
+                    self.val_obj_iter = iter(self.val_obj_dataloader)
+                    _, imgs, targets = self.val_obj_iter.next()
 
-            imgs = imgs.to(self.device)
-            targets = targets.to(self.device)
+                imgs = imgs.to(self.device)
+                targets = targets.to(self.device)
 
             with torch.no_grad():
                 outputs, losses = self.process(inputs, cells)
-                losses['obj_loss'], _, _ = self.model(imgs, targets)
+                if((i % 3) == 0):
+                    losses['obj_loss'], _, _ = self.model(imgs, targets)
+                    obj_loss = losses['obj_loss']
+                else:
+                    losses['obj_loss'] = obj_loss
                 for k in loss_mean.keys():
                     loss_mean[k] += losses[k]
             
