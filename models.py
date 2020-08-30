@@ -383,7 +383,7 @@ if __name__ == "__main__":
     #             param.requires_grad = False
     # #model.apply(fix_bn)
 
-    model = Darknet("./yoloatt_v3_2.cfg")
+    model = Darknet("yoloatt_v3_split.cfg")
     for name, module in model.named_modules():
         #module
         print('children module:', name)
@@ -401,7 +401,8 @@ if __name__ == "__main__":
                 print(k)
                 print(v.requires_grad)
     
-    # d=torch.rand(2,3,416,416)
-    # targets = torch.rand((4,6))
-    # y = model(d,targets=targets)
-    # print(y[-1].size())
+    d=torch.rand(2,3,416,416)
+    targets = torch.rand((4,6))
+    l,des,y = model(d,targets=targets)
+    print(y[-1].size())
+    print(l,des.size())
