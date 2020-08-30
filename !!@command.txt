@@ -1,0 +1,1 @@
+python -u dect_obj_3_pred.py --out_path=./epoch_yolos_test_1/outimg --weights_path=../weights/yoloatt_v3_split_w.pth --batch_size=4
