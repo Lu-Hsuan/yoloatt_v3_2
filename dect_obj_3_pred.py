@@ -25,8 +25,8 @@ from matplotlib.ticker import NullLocator
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_folder", type=str, default="../data/coco/5k.txt", help="path to dataset")
-    parser.add_argument("--model_def", type=str, default="./yoloatt_v3.cfg", help="path to model definition file")
-    parser.add_argument("--weights_path", type=str, default="../weights/yoloatt_v3_1_w.pth", help="path to weights file")
+    parser.add_argument("--model_def", type=str, default="./yoloatt_v3_split.cfg", help="path to model definition file")
+    parser.add_argument("--weights_path", type=str, default="../weights/yoloatt_v3_split_w.pth", help="path to weights file")
     parser.add_argument("--class_path", type=str, default="./coco.names", help="path to class label file")
     parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
     parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     # Set up model
     model = Darknet(opt.model_def, img_size=opt.img_size).to(device)
-    init_w ='../weights/yoloatt_v3_1_w.pth'
+    init_w ='../weights/yoloatt_v3_split_w.pth'
     model.load_state_dict(torch.load(init_w))
     model.eval()  # Set in evaluation mode
     classes = load_classes(opt.class_path)  # Extracts class labels from file

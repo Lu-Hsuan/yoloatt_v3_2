@@ -6,6 +6,7 @@ class YOLOATT_OPTION:
         self.parser = argparse.ArgumentParser(description="YoloAtt options")
 
         self.parser.add_argument("--model_name", type=str, help="mdoel name", default='yoloatt')
+        self.parser.add_argument("--model_cfg", type=str, help="mdoel name", default='yoloatt_v3_split.cfg')
         self.parser.add_argument("--data_path", type=str, help="path to the data", default='../data')
         self.parser.add_argument("--width", type=int, help="width of input", default=320)
         self.parser.add_argument("--height", type=int, help="height of input", default=224)

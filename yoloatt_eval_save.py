@@ -29,7 +29,7 @@ class Tester:
         print(self.opt)
 
         self.device = 'cuda' if not self.opt.no_cuda else 'cpu'
-        self.model = Darknet("./yoloatt_v3.cfg")
+        self.model = Darknet(opt.model_cfg)
         self.model.to(self.device)
         self.tar_shape_r,self.tar_shape_c = 480,640
 
