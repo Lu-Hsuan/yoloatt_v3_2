@@ -30,7 +30,7 @@ class Trainer:
         print(self.opt)
 
         self.device = 'cuda' if not self.opt.no_cuda else 'cpu'
-        self.model = Darknet("./yoloatt_v3_2.cfg")
+        self.model = Darknet(opt.model_cfg)
         self.model.to(self.device)
         # Fix weight about yolo 0-106
         for name, module in self.model.named_modules():

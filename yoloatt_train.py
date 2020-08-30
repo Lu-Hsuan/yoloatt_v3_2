@@ -30,7 +30,7 @@ class Trainer:
         print(self.opt)
 
         self.device = 'cuda' if not self.opt.no_cuda else 'cpu'
-        self.model = Darknet("./yoloatt_v3_2.cfg")
+        self.model = Darknet(opt.model_cfg)
         self.model.to(self.device)
         
         self.model_optimizer = torch.optim.Adam(self.model.parameters(), self.opt.lr)
