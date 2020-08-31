@@ -251,6 +251,7 @@ class Trainer:
 
         self.log('val', inputs, cells, outputs, loss_mean)
         self.model.train()
+        self.frozen_model()
 
 
     def process(self, inputs, cells):
