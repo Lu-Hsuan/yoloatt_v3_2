@@ -100,6 +100,9 @@ class Trainer:
         self.obj_flag = False
         self.model_optimizer.param_groups[0]['lr'] = self.opt.lr
         print('lr = ',self.model_optimizer.param_groups[0]['lr'])
+        self.bestloss = None
+        self.bestmodel = None
+        self.beststep = None
 
     def train(self):
         self.step = 0
@@ -109,6 +112,13 @@ class Trainer:
 
             if self.epoch % self.opt.save_period == 0:
                 self.save_model(self.epoch)
+
+        path = os.path.join(self.opt.log_path, self.opt.model_name, 'model', f'weight_{self.beststep}')
+        if not os.path.exists(path):
+            os.makedirs(path)
+        print(f"saving {path}")
+        save_path = os.path.join(path, "yoloatt_v3_1.pth")
+        torch.save(self.bestmodel, save_path)
 
         self.save_model(self.epoch)
         print("Finish")
@@ -250,6 +260,16 @@ class Trainer:
             #################################################################
 
         self.log('val', inputs, cells, outputs, loss_mean)
+        if self.bestloss == None:
+            self.bestloss = float(losses['total'].cpu().numpy())
+            self.bestmodel = deepcopy(self.model.state_dict())
+            self.beststep = self.step
+
+        if self.bestloss > float(losses['total'].cpu().numpy()):
+            self.bestloss = float(losses['total'].cpu().numpy())
+            self.bestmodel = deepcopy(self.model.state_dict())
+            self.beststep = self.step
+
         self.model.train()
         self.frozen_model()
 
