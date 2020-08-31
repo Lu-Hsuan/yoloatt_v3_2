@@ -18,6 +18,7 @@ from utils import datasets
 from models import Darknet
 from option import YOLOATT_OPTION
 import warnings
+from copy import deepcopy
 #warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=Warning)
 # using this when you only have a cpu and testing code:
