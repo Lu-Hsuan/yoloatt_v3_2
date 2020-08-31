@@ -64,7 +64,7 @@ class Tester:
                 att_out = att_outs[-1][:,0,:,:]
                 att_out = att_out.reshape(att_out.size()[0],1,att_out.size()[-2],att_out.size()[-1])
                 #print(out.size())
-                logits = nn.functional.interpolate(att_out,size=[self.tar_shape_r,self.tar_shape_c],mode='bilinear')
+                logits = nn.functional.interpolate(out,size=[self.tar_shape_r,self.tar_shape_c],mode='bilinear')
                 att_logits = nn.functional.interpolate(att_out,size=[self.tar_shape_r,self.tar_shape_c],mode='bilinear')
                 map_p = logits.cpu().numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
                 map_g = map_.numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
