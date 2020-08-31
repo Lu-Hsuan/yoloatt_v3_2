@@ -223,7 +223,7 @@ class Trainer:
             #    break
             
             if((self.step) % self.Tmax == 0 and self.step != 0):
-                self.model_optimizer.param_groups[0]['initial_lr'] = self.opt.lr*0.7**(_/self.Tmax+1)
+                self.model_optimizer.param_groups[0]['initial_lr'] = self.opt.lr*0.7**(self.step/self.Tmax+1)
                 self.model_lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.model_optimizer, T_max=self.T_max,eta_min=1e-6,last_epoch=-1)
                 
             self.model_lr_scheduler.step()
