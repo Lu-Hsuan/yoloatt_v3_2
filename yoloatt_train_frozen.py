@@ -33,15 +33,7 @@ class Trainer:
         self.model = Darknet(opt.model_cfg)
         self.model.to(self.device)
         # Fix weight about yolo 0-106
-        for name, module in self.model.named_modules():
-            #module
-            #print('children module:', name)
-            if(len(name.split('.'))>=3):
-                if(int(name.split('.')[1])<107):
-                    module.eval()
-                    for param in module.parameters():
-                        #print(k)
-                        param.requires_grad = False
+        
         self.para_train = []
         for k, v in dict(self.model.named_parameters()).items():
             if(len(k.split('.'))>=3):
@@ -139,7 +131,7 @@ class Trainer:
 
     def run_epoch(self):
         self.model.train()
-
+        self.frozen_model()
         log_losses= {'0': 0., '1': 0., '2': 0., 'total': 0., 'obj_loss': 0.}
         for i, (inputs, cells) in enumerate(self.train_dataloader):
             if self.opt.debug: 
@@ -345,6 +337,17 @@ class Trainer:
                 self.model.load_state_dict(torch.load(self.opt.weight+'/yoloatt_v3_1.pth'))
                 self.model_optimizer.load_state_dict(torch.load(self.opt.weight+'/adam.pth'))
             #################################################################################################################
+        def frozen_model(self):
+            for name, module in self.model.named_modules():
+            #module
+            #print('children module:', name)
+            if(len(name.split('.'))>=2):
+                if(int(name.split('.')[1])<107):
+                    module.eval()
+                    for param in module.parameters():
+                        #print(k)
+                        param.requires_grad = False
+
 if __name__ == '__main__':
 
     opt = YOLOATT_OPTION().parse()
