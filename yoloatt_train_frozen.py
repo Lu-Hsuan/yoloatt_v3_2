@@ -43,10 +43,11 @@ class Trainer:
                     #print(k)
                     #print(v.requires_grad)
         self.model_optimizer = torch.optim.Adam(self.para_train, self.opt.lr)
-        self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
-                                    self.model_optimizer, self.opt.decay_step, self.opt.decay_factor)
-
-
+        #self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
+        #                            self.model_optimizer, self.opt.decay_step, self.opt.decay_factor)
+        self.Tmax = 312*3
+        self.model_lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.model_optimizer, T_max=self.Tmax,eta_min=1e-6,last_epoch=-1)
+            
         train_dataset = SALCell_Dataset(self.opt.data_path, "train", self.opt.height, self.opt.width,augment=True)
         val_dataset = SALCell_Dataset(self.opt.data_path, "val", self.opt.height, self.opt.width,augment=False)
 
@@ -217,11 +218,16 @@ class Trainer:
                     log_losses[k] = 0.
 
                 self.val()
+                print('lr = ',self.model_optimizer.param_groups[0]['lr'])
             #if(i==100):
             #    break
-            self.step += 1
+            
+        if((self.step) % self.Tmax == 0 and self.step != 0):
+            self.model_optimizer.param_groups[0]['initial_lr'] = self.opt.lr*0.7**(_/self.Tmax+1)
+            self.model_lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.model_optimizer, T_max=self.T_max,eta_min=1e-6,last_epoch=-1)
+            
         self.model_lr_scheduler.step()
-
+        self.step += 1
 
     def val(self):
         self.model.eval()
