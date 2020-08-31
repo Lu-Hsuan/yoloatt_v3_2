@@ -341,12 +341,12 @@ class Trainer:
             for name, module in self.model.named_modules():
             #module
             #print('children module:', name)
-            if(len(name.split('.'))>=2):
-                if(int(name.split('.')[1])<107):
-                    module.eval()
-                    for param in module.parameters():
-                        #print(k)
-                        param.requires_grad = False
+                if(len(name.split('.'))>=2):
+                    if(int(name.split('.')[1])<107):
+                        module.eval()
+                        for param in module.parameters():
+                            #print(k)
+                            param.requires_grad = False
 
 if __name__ == '__main__':
 
