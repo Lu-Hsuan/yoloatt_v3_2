@@ -34,7 +34,7 @@ class SALCell_Dataset(Dataset):
             self.transform = transforms.Compose([ 
                             transforms.ToPILImage(),
                             transforms.Resize((shape_r, shape_c),interpolation=cv2.INTER_LINEAR),
-                            transforms.ColorJitter(hue=(-0.1, 0.1), saturation=(0.8, 1.2), brightness=(0.8, 1.2), contrast=(0.8, 1.2)),
+                            #transforms.ColorJitter(hue=(-0.1, 0.1), saturation=(0.8, 1.2), brightness=(0.8, 1.2), contrast=(0.8, 1.2)),
                             transforms.ToTensor()
                             #transforms.Normalize(mean=[0.485, 0.456, 0.406],
                             #                    std=[0.229, 0.224, 0.225])
