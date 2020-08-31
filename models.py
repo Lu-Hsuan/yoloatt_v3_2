@@ -382,9 +382,9 @@ if __name__ == "__main__":
     #             print(k)
     #             param.requires_grad = False
     # #model.apply(fix_bn)
-    """
+    #"""
     w1 = '!weight/yoloatt_v3_split_w.pth'
-    w2 =  '!epoch\epoch_yolos_frozen_1\yoloatt_v3_1.pth'
+    w2 =  '!epoch\epoch_yolos_frozen_2\yoloatt_v3_1.pth'
     stat1 = torch.load(w1)
     stat2 = torch.load(w2)
     for ((k1,v1),(k2,v2)) in zip(stat1.items(),stat2.items()):
@@ -392,7 +392,7 @@ if __name__ == "__main__":
         v1 = v1.to('cpu')
         v2 = v2.to('cpu')
         print(torch.all(torch.eq(v1, v2)))
-    """
+    #"""
     model = Darknet("yoloatt_v3_split.cfg")
     for name, module in model.named_modules():
         #module
