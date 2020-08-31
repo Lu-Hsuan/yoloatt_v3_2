@@ -337,16 +337,16 @@ class Trainer:
                 self.model.load_state_dict(torch.load(self.opt.weight+'/yoloatt_v3_1.pth'))
                 self.model_optimizer.load_state_dict(torch.load(self.opt.weight+'/adam.pth'))
             #################################################################################################################
-        def frozen_model(self):
-            for name, module in self.model.named_modules():
-            #module
-            #print('children module:', name)
-                if(len(name.split('.'))>=2):
-                    if(int(name.split('.')[1])<107):
-                        module.eval()
-                        for param in module.parameters():
-                            #print(k)
-                            param.requires_grad = False
+    def frozen_model(self):
+        for name, module in self.model.named_modules():
+        #module
+        #print('children module:', name)
+            if(len(name.split('.'))>=2):
+                if(int(name.split('.')[1])<107):
+                    module.eval()
+                    for param in module.parameters():
+                        #print(k)
+                        param.requires_grad = False
 
 if __name__ == '__main__':
 
