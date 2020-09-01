@@ -1,0 +1,303 @@
+/opt/ohpc/admin/lmod/lmod/init/bash: line 71: conda: command not found
+/opt/ohpc/admin/lmod/lmod/init/bash: line 71: conda: command not found
+Message from TWCC HPC admin
+-----------------------
+loading miniconda3 with conda 4.8.4/python 3.7
+docs : https://hackmd.io/@kmo/twcc_hpc_conda
+-----------------------
+
+Namespace(batch_size=32, data_path='../data', debug=False, decay_factor=0.1, decay_step=10, epochs=15, height=224, img_size=416, log_path='epoch_yolos_frozen_2_cos_nonth', log_period=50, loss_weight=0.0001, lr=0.0007, model_cfg='yoloatt_v3_split.cfg', model_name='yoloatt', multiscale_training=True, no_cuda=False, num_workers=8, obj_names='./coco.names', obj_path='./', save_period=1, see_grad=False, use_yolov3=False, weight='./epoch_yolos_frozen_1_cos/yoloatt/model/weight_15/yoloatt_v3_1.pth', width=320)
+Dataset : train, number : 10000
+Dataset : val, number : 5000
+Load Model from ./epoch_yolos_frozen_1_cos/yoloatt/model/weight_15/yoloatt_v3_1.pth
+only load model
+117264 5000
+lr =  0.0007
+Epoch: 1 / Batch: 50, Att Loss: 0.472, Obj Loss: 0.000 (process time: 0.074, left time: 00h05m41s)
+val loss: attention: 0.5082324743270874, obj: 33.4958610534668
+lr =  0.0006950899521185815
+Epoch: 1 / Batch: 100, Att Loss: 0.458, Obj Loss: 0.000 (process time: 0.076, left time: 00h05m50s)
+val loss: attention: 0.4963616728782654, obj: 30.921619415283203
+lr =  0.0006804977688188052
+Epoch: 1 / Batch: 150, Att Loss: 0.457, Obj Loss: 0.000 (process time: 0.069, left time: 00h05m12s)
+val loss: attention: 0.4819660186767578, obj: 31.223251342773438
+lr =  0.0006566334547856282
+Epoch: 1 / Batch: 200, Att Loss: 0.449, Obj Loss: 0.000 (process time: 0.085, left time: 00h06m22s)
+val loss: attention: 0.49090659618377686, obj: 31.605701446533203
+lr =  0.0006241675389149602
+Epoch: 1 / Batch: 250, Att Loss: 0.459, Obj Loss: 0.000 (process time: 0.074, left time: 00h05m28s)
+val loss: attention: 0.49358540773391724, obj: 34.15252685546875
+lr =  0.0005840122340905723
+Epoch: 1 / Batch: 300, Att Loss: 0.449, Obj Loss: 0.000 (process time: 0.076, left time: 00h05m34s)
+val loss: attention: 0.5010662078857422, obj: 31.65813636779785
+lr =  0.0005372958062316675
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_1
+Epoch: 2 / Batch: 50, Att Loss: 0.455, Obj Loss: 0.000 (process time: 0.116, left time: 00h08m19s)
+val loss: attention: 0.4903269410133362, obj: 34.7073860168457
+lr =  0.0004722379669093682
+Epoch: 2 / Batch: 100, Att Loss: 0.454, Obj Loss: 0.000 (process time: 0.122, left time: 00h08m41s)
+val loss: attention: 0.48933884501457214, obj: 30.863801956176758
+lr =  0.00041580539449678067
+Epoch: 2 / Batch: 150, Att Loss: 0.448, Obj Loss: 0.000 (process time: 0.149, left time: 00h10m27s)
+val loss: attention: 0.4919981360435486, obj: 34.4296760559082
+lr =  0.0003575379001162722
+Epoch: 2 / Batch: 200, Att Loss: 0.451, Obj Loss: 0.000 (process time: 0.099, left time: 00h06m52s)
+val loss: attention: 0.4857959747314453, obj: 35.50007629394531
+lr =  0.0002990726579443158
+Epoch: 2 / Batch: 250, Att Loss: 0.447, Obj Loss: 0.000 (process time: 0.106, left time: 00h07m15s)
+val loss: attention: 0.4885489344596863, obj: 31.36386489868164
+lr =  0.00024205239838699487
+Epoch: 2 / Batch: 300, Att Loss: 0.446, Obj Loss: 0.000 (process time: 0.102, left time: 00h06m55s)
+val loss: attention: 0.4822203814983368, obj: 34.52857971191406
+lr =  0.00018807925137070332
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_2
+Epoch: 3 / Batch: 50, Att Loss: 0.449, Obj Loss: 0.000 (process time: 0.137, left time: 00h09m08s)
+val loss: attention: 0.48709172010421753, obj: 35.90138626098633
+lr =  0.0001276480147907863
+Epoch: 3 / Batch: 100, Att Loss: 0.444, Obj Loss: 0.000 (process time: 0.107, left time: 00h07m04s)
+val loss: attention: 0.4945503771305084, obj: 39.500205993652344
+lr =  8.580762567797543e-05
+Epoch: 3 / Batch: 150, Att Loss: 0.439, Obj Loss: 0.000 (process time: 0.070, left time: 00h04m33s)
+val loss: attention: 0.48523178696632385, obj: 31.3680362701416
+lr =  5.140444533064423e-05
+Epoch: 3 / Batch: 200, Att Loss: 0.430, Obj Loss: 0.000 (process time: 0.127, left time: 00h08m10s)
+val loss: attention: 0.4855806231498718, obj: 31.948726654052734
+lr =  2.540511902935637e-05
+Epoch: 3 / Batch: 250, Att Loss: 0.447, Obj Loss: 0.000 (process time: 0.081, left time: 00h05m08s)
+val loss: attention: 0.48101040720939636, obj: 33.210018157958984
+lr =  8.540164296423315e-06
+Epoch: 3 / Batch: 300, Att Loss: 0.443, Obj Loss: 0.000 (process time: 0.128, left time: 00h08m00s)
+val loss: attention: 0.4866419732570648, obj: 31.04326629638672
+lr =  1.2834451390364307e-06
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_3
+Epoch: 4 / Batch: 50, Att Loss: 0.456, Obj Loss: 0.000 (process time: 0.128, left time: 00h07m52s)
+val loss: attention: 0.48625004291534424, obj: 31.0778865814209
+lr =  0.0003405976589764733
+Epoch: 4 / Batch: 100, Att Loss: 0.440, Obj Loss: 0.000 (process time: 0.100, left time: 00h06m04s)
+val loss: attention: 0.49228543043136597, obj: 30.697546005249023
+lr =  0.00033345813581692603
+Epoch: 4 / Batch: 150, Att Loss: 0.444, Obj Loss: 0.000 (process time: 0.115, left time: 00h06m53s)
+val loss: attention: 0.49247846007347107, obj: 36.1358757019043
+lr =  0.00032178203367193796
+Epoch: 4 / Batch: 200, Att Loss: 0.448, Obj Loss: 0.000 (process time: 0.169, left time: 00h09m59s)
+val loss: attention: 0.4971986711025238, obj: 32.08638381958008
+lr =  0.00030589742247341396
+Epoch: 4 / Batch: 250, Att Loss: 0.443, Obj Loss: 0.000 (process time: 0.139, left time: 00h08m04s)
+val loss: attention: 0.4946517050266266, obj: 32.1854248046875
+lr =  0.000286250620971353
+Epoch: 4 / Batch: 300, Att Loss: 0.444, Obj Loss: 0.000 (process time: 0.130, left time: 00h07m26s)
+val loss: attention: 0.4862563908100128, obj: 33.31144714355469
+lr =  0.0002633936562678545
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_4
+Epoch: 5 / Batch: 50, Att Loss: 0.446, Obj Loss: 0.000 (process time: 0.129, left time: 00h07m16s)
+val loss: attention: 0.4864385426044464, obj: 35.64821243286133
+lr =  0.00023156278209299544
+Epoch: 5 / Batch: 100, Att Loss: 0.440, Obj Loss: 0.000 (process time: 0.111, left time: 00h06m08s)
+val loss: attention: 0.4947407841682434, obj: 31.527450561523438
+lr =  0.00020395199559069939
+Epoch: 5 / Batch: 150, Att Loss: 0.441, Obj Loss: 0.000 (process time: 0.106, left time: 00h05m46s)
+val loss: attention: 0.48633888363838196, obj: 34.326988220214844
+lr =  0.00017544343610839062
+Epoch: 5 / Batch: 200, Att Loss: 0.444, Obj Loss: 0.000 (process time: 0.071, left time: 00h03m49s)
+val loss: attention: 0.48657190799713135, obj: 33.61790466308594
+lr =  0.00014683812448777677
+Epoch: 5 / Batch: 250, Att Loss: 0.437, Obj Loss: 0.000 (process time: 0.129, left time: 00h06m50s)
+val loss: attention: 0.4891413450241089, obj: 37.60798645019531
+lr =  0.00011893980006917346
+Epoch: 5 / Batch: 300, Att Loss: 0.439, Obj Loss: 0.000 (process time: 0.104, left time: 00h05m27s)
+val loss: attention: 0.48682135343551636, obj: 35.88874816894531
+lr =  9.253233758051572e-05
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_5
+Epoch: 6 / Batch: 50, Att Loss: 0.446, Obj Loss: 0.000 (process time: 0.102, left time: 00h05m13s)
+val loss: attention: 0.48653870820999146, obj: 33.6098518371582
+lr =  6.296512311652203e-05
+Epoch: 6 / Batch: 100, Att Loss: 0.431, Obj Loss: 0.000 (process time: 0.079, left time: 00h03m58s)
+val loss: attention: 0.48369866609573364, obj: 32.87947463989258
+lr =  4.249385977377337e-05
+Epoch: 6 / Batch: 150, Att Loss: 0.430, Obj Loss: 0.000 (process time: 0.077, left time: 00h03m47s)
+val loss: attention: 0.49385175108909607, obj: 30.640613555908203
+lr =  2.566140243645252e-05
+Epoch: 6 / Batch: 200, Att Loss: 0.443, Obj Loss: 0.000 (process time: 0.095, left time: 00h04m36s)
+val loss: attention: 0.49446746706962585, obj: 31.220548629760742
+lr =  1.294070201436319e-05
+Epoch: 6 / Batch: 250, Att Loss: 0.441, Obj Loss: 0.000 (process time: 0.158, left time: 00h07m34s)
+val loss: attention: 0.4898965656757355, obj: 31.251008987426758
+lr =  4.68917909782085e-06
+Epoch: 6 / Batch: 300, Att Loss: 0.431, Obj Loss: 0.000 (process time: 0.100, left time: 00h04m42s)
+val loss: attention: 0.4839438796043396, obj: 31.45317268371582
+lr =  1.1386813126616015e-06
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_6
+Epoch: 7 / Batch: 50, Att Loss: 0.447, Obj Loss: 0.000 (process time: 0.126, left time: 00h05m47s)
+val loss: attention: 0.49275481700897217, obj: 34.01508331298828
+lr =  0.00023842046860021848
+Epoch: 7 / Batch: 100, Att Loss: 0.437, Obj Loss: 0.000 (process time: 0.128, left time: 00h05m47s)
+val loss: attention: 0.4887736141681671, obj: 32.032386779785156
+lr =  0.00023342906512814897
+Epoch: 7 / Batch: 150, Att Loss: 0.433, Obj Loss: 0.000 (process time: 0.147, left time: 00h06m31s)
+val loss: attention: 0.49208593368530273, obj: 33.799434661865234
+lr =  0.00022526603582152138
+Epoch: 7 / Batch: 200, Att Loss: 0.443, Obj Loss: 0.000 (process time: 0.072, left time: 00h03m06s)
+val loss: attention: 0.4773976802825928, obj: 32.5380744934082
+lr =  0.00021416074185202674
+Epoch: 7 / Batch: 250, Att Loss: 0.444, Obj Loss: 0.000 (process time: 0.113, left time: 00h04m49s)
+val loss: attention: 0.4888136684894562, obj: 36.011390686035156
+lr =  0.00020042521483698922
+Epoch: 7 / Batch: 300, Att Loss: 0.441, Obj Loss: 0.000 (process time: 0.128, left time: 00h05m20s)
+val loss: attention: 0.48737263679504395, obj: 32.76485824584961
+lr =  0.00018444538951357863
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_7
+Epoch: 8 / Batch: 50, Att Loss: 0.444, Obj Loss: 0.000 (process time: 0.148, left time: 00h06m01s)
+val loss: attention: 0.4947473704814911, obj: 32.5118408203125
+lr =  0.000162191699410629
+Epoch: 8 / Batch: 100, Att Loss: 0.434, Obj Loss: 0.000 (process time: 0.123, left time: 00h04m53s)
+val loss: attention: 0.49259069561958313, obj: 35.07875442504883
+lr =  0.00014288836884718167
+Epoch: 8 / Batch: 150, Att Loss: 0.441, Obj Loss: 0.000 (process time: 0.121, left time: 00h04m43s)
+val loss: attention: 0.48782193660736084, obj: 40.71459197998047
+lr =  0.00012295738471788326
+Epoch: 8 / Batch: 200, Att Loss: 0.433, Obj Loss: 0.000 (process time: 0.121, left time: 00h04m38s)
+val loss: attention: 0.49350085854530334, obj: 33.2642707824707
+lr =  0.00010295875896206824
+Epoch: 8 / Batch: 250, Att Loss: 0.431, Obj Loss: 0.000 (process time: 0.126, left time: 00h04m42s)
+val loss: attention: 0.48257556557655334, obj: 32.07563781738281
+lr =  8.345440408344825e-05
+Epoch: 8 / Batch: 300, Att Loss: 0.438, Obj Loss: 0.000 (process time: 0.125, left time: 00h04m34s)
+val loss: attention: 0.4895170331001282, obj: 32.706783294677734
+lr =  6.499234478216749e-05
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_8
+Epoch: 9 / Batch: 50, Att Loss: 0.440, Obj Loss: 0.000 (process time: 0.132, left time: 00h04m40s)
+val loss: attention: 0.48510122299194336, obj: 30.717924118041992
+lr =  4.4321230810410496e-05
+Epoch: 9 / Batch: 100, Att Loss: 0.431, Obj Loss: 0.000 (process time: 0.167, left time: 00h05m47s)
+val loss: attention: 0.48955097794532776, obj: 30.796005249023438
+lr =  3.0009303719032726e-05
+Epoch: 9 / Batch: 150, Att Loss: 0.437, Obj Loss: 0.000 (process time: 0.099, left time: 00h03m21s)
+val loss: attention: 0.4889099597930908, obj: 31.25640869140625
+lr =  1.8241348896361953e-05
+Epoch: 9 / Batch: 200, Att Loss: 0.425, Obj Loss: 0.000 (process time: 0.096, left time: 00h03m09s)
+val loss: attention: 0.5015513896942139, obj: 34.116004943847656
+lr =  9.348017110041624e-06
+Epoch: 9 / Batch: 250, Att Loss: 0.433, Obj Loss: 0.000 (process time: 0.115, left time: 00h03m42s)
+val loss: attention: 0.49503079056739807, obj: 32.41950225830078
+lr =  3.5791892464589603e-06
+Epoch: 9 / Batch: 300, Att Loss: 0.435, Obj Loss: 0.000 (process time: 0.109, left time: 00h03m26s)
+val loss: attention: 0.4832894802093506, obj: 33.38356399536133
+lr =  1.0969552685888562e-06
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_9
+Epoch: 10 / Batch: 50, Att Loss: 0.444, Obj Loss: 0.000 (process time: 0.133, left time: 00h04m02s)
+val loss: attention: 0.4907718300819397, obj: 33.165462493896484
+lr =  0.00016689643533684034
+Epoch: 10 / Batch: 100, Att Loss: 0.429, Obj Loss: 0.000 (process time: 0.103, left time: 00h03m02s)
+val loss: attention: 0.48639845848083496, obj: 31.980422973632812
+lr =  0.00016340871564600535
+Epoch: 10 / Batch: 150, Att Loss: 0.433, Obj Loss: 0.000 (process time: 0.083, left time: 00h02m22s)
+val loss: attention: 0.49974343180656433, obj: 35.445213317871094
+lr =  0.0001577048373262301
+Epoch: 10 / Batch: 200, Att Loss: 0.432, Obj Loss: 0.000 (process time: 0.104, left time: 00h02m53s)
+val loss: attention: 0.4871059060096741, obj: 33.6859130859375
+lr =  0.00014994506541705623
+Epoch: 10 / Batch: 250, Att Loss: 0.438, Obj Loss: 0.000 (process time: 0.195, left time: 00h05m15s)
+val loss: attention: 0.48270606994628906, obj: 33.36466979980469
+lr =  0.00014034743054293532
+Epoch: 10 / Batch: 300, Att Loss: 0.436, Obj Loss: 0.000 (process time: 0.071, left time: 00h01m50s)
+val loss: attention: 0.4969319999217987, obj: 38.8196907043457
+lr =  0.00012918160278558595
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_10
+Epoch: 11 / Batch: 50, Att Loss: 0.436, Obj Loss: 0.000 (process time: 0.162, left time: 00h04m04s)
+val loss: attention: 0.49811115860939026, obj: 36.46076583862305
+lr =  0.00011363194153297281
+Epoch: 11 / Batch: 100, Att Loss: 0.430, Obj Loss: 0.000 (process time: 0.098, left time: 00h02m23s)
+val loss: attention: 0.49541157484054565, obj: 33.44460678100586
+lr =  0.0001001438301267196
+Epoch: 11 / Batch: 150, Att Loss: 0.429, Obj Loss: 0.000 (process time: 0.099, left time: 00h02m19s)
+val loss: attention: 0.48867928981781006, obj: 30.52375602722168
+lr =  8.621714874452861e-05
+Epoch: 11 / Batch: 200, Att Loss: 0.441, Obj Loss: 0.000 (process time: 0.101, left time: 00h02m17s)
+val loss: attention: 0.4973490536212921, obj: 33.50391387939453
+lr =  7.224320309407257e-05
+Epoch: 11 / Batch: 250, Att Loss: 0.433, Obj Loss: 0.000 (process time: 0.075, left time: 00h01m38s)
+val loss: attention: 0.49632832407951355, obj: 30.347145080566406
+lr =  5.8614626893440836e-05
+Epoch: 11 / Batch: 300, Att Loss: 0.428, Obj Loss: 0.000 (process time: 0.078, left time: 00h01m37s)
+val loss: attention: 0.4897955060005188, obj: 31.76337242126465
+lr =  4.5714349823323774e-05
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_11
+Epoch: 12 / Batch: 50, Att Loss: 0.431, Obj Loss: 0.000 (process time: 0.132, left time: 00h02m38s)
+val loss: attention: 0.48449617624282837, obj: 29.61229133605957
+lr =  3.127050619613246e-05
+Epoch: 12 / Batch: 100, Att Loss: 0.435, Obj Loss: 0.000 (process time: 0.129, left time: 00h02m28s)
+val loss: attention: 0.486915647983551, obj: 35.95723342895508
+lr =  2.1270114480714298e-05
+Epoch: 12 / Batch: 150, Att Loss: 0.429, Obj Loss: 0.000 (process time: 0.152, left time: 00h02m46s)
+val loss: attention: 0.491427481174469, obj: 32.21102523803711
+lr =  1.3047311418298549e-05
+Epoch: 12 / Batch: 200, Att Loss: 0.427, Obj Loss: 0.000 (process time: 0.105, left time: 00h01m50s)
+val loss: attention: 0.48449012637138367, obj: 33.28757858276367
+lr =  6.833137677016523e-06
+Epoch: 12 / Batch: 250, Att Loss: 0.425, Obj Loss: 0.000 (process time: 0.125, left time: 00h02m04s)
+val loss: attention: 0.49108758568763733, obj: 32.50382995605469
+lr =  2.802196350505637e-06
+Epoch: 12 / Batch: 300, Att Loss: 0.431, Obj Loss: 0.000 (process time: 0.101, left time: 00h01m35s)
+val loss: attention: 0.49111148715019226, obj: 34.765655517578125
+lr =  1.0677470377379345e-06
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_12
+Epoch: 13 / Batch: 50, Att Loss: 0.442, Obj Loss: 0.000 (process time: 0.203, left time: 00h03m00s)
+val loss: attention: 0.489008367061615, obj: 33.8429069519043
+lr =  0.00011682961205247548
+Epoch: 13 / Batch: 100, Att Loss: 0.426, Obj Loss: 0.000 (process time: 0.153, left time: 00h02m07s)
+val loss: attention: 0.4959169626235962, obj: 32.475196838378906
+lr =  0.00011439447100850458
+Epoch: 13 / Batch: 150, Att Loss: 0.429, Obj Loss: 0.000 (process time: 0.129, left time: 00h01m41s)
+val loss: attention: 0.4917066693305969, obj: 34.48317337036133
+lr =  0.00011041199837952594
+Epoch: 13 / Batch: 200, Att Loss: 0.436, Obj Loss: 0.000 (process time: 0.101, left time: 00h01m14s)
+val loss: attention: 0.4844909906387329, obj: 38.628150939941406
+lr =  0.00010499409191257661
+Epoch: 13 / Batch: 250, Att Loss: 0.424, Obj Loss: 0.000 (process time: 0.162, left time: 00h01m50s)
+val loss: attention: 0.4909297823905945, obj: 33.80400085449219
+lr =  9.829298153709734e-05
+Epoch: 13 / Batch: 300, Att Loss: 0.435, Obj Loss: 0.000 (process time: 0.088, left time: 00h00m56s)
+val loss: attention: 0.4991697371006012, obj: 33.42367935180664
+lr =  9.049695207599098e-05
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_13
+Epoch: 14 / Batch: 50, Att Loss: 0.439, Obj Loss: 0.000 (process time: 0.168, left time: 00h01m36s)
+val loss: attention: 0.4874211251735687, obj: 33.29204559326172
+lr =  7.964011101861347e-05
+Epoch: 14 / Batch: 100, Att Loss: 0.423, Obj Loss: 0.000 (process time: 0.108, left time: 00h00m56s)
+val loss: attention: 0.5004818439483643, obj: 30.693513870239258
+lr =  7.02226530223961e-05
+Epoch: 14 / Batch: 150, Att Loss: 0.428, Obj Loss: 0.000 (process time: 0.166, left time: 00h01m18s)
+val loss: attention: 0.4911310076713562, obj: 31.21127700805664
+lr =  6.049898356318021e-05
+Epoch: 14 / Batch: 200, Att Loss: 0.429, Obj Loss: 0.000 (process time: 0.164, left time: 00h01m09s)
+val loss: attention: 0.48874783515930176, obj: 31.60507583618164
+lr =  5.074231398647558e-05
+Epoch: 14 / Batch: 250, Att Loss: 0.430, Obj Loss: 0.000 (process time: 0.130, left time: 00h00m48s)
+val loss: attention: 0.49021750688552856, obj: 34.03472137451172
+lr =  4.122678286043565e-05
+Epoch: 14 / Batch: 300, Att Loss: 0.428, Obj Loss: 0.000 (process time: 0.071, left time: 00h00m22s)
+val loss: attention: 0.4888899624347687, obj: 31.379487991333008
+lr =  3.2219753352133244e-05
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_14
+Epoch: 15 / Batch: 50, Att Loss: 0.437, Obj Loss: 0.000 (process time: 0.202, left time: 00h00m52s)
+val loss: attention: 0.4942747950553894, obj: 34.53303527832031
+lr =  2.2134998966137914e-05
+Epoch: 15 / Batch: 100, Att Loss: 0.424, Obj Loss: 0.000 (process time: 0.106, left time: 00h00m22s)
+val loss: attention: 0.4973595142364502, obj: 30.695255279541016
+lr =  1.5152682013891463e-05
+Epoch: 15 / Batch: 150, Att Loss: 0.426, Obj Loss: 0.000 (process time: 0.147, left time: 00h00m23s)
+val loss: attention: 0.48991498351097107, obj: 34.185970306396484
+lr =  9.411485183654224e-06
+Epoch: 15 / Batch: 200, Att Loss: 0.430, Obj Loss: 0.000 (process time: 0.165, left time: 00h00m18s)
+val loss: attention: 0.49955135583877563, obj: 35.724647521972656
+lr =  5.072722073898979e-06
+Epoch: 15 / Batch: 250, Att Loss: 0.422, Obj Loss: 0.000 (process time: 0.134, left time: 00h00m08s)
+val loss: attention: 0.49251094460487366, obj: 31.42127799987793
+lr =  2.2583013233383167e-06
+Epoch: 15 / Batch: 300, Att Loss: 0.425, Obj Loss: 0.000 (process time: 0.148, left time: 00h00m01s)
+val loss: attention: 0.4821343421936035, obj: 34.83384323120117
+lr =  1.0473012761422898e-06
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_15
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_3170
+saving epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_15
+Finish
