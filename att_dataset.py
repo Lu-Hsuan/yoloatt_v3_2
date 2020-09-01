@@ -27,7 +27,7 @@ class SALCell_Dataset(Dataset):
         #self.batch_size = batch_size
         self.img_p = os.path.join(data_path, 'images',self.phase)
         self.map_p = os.path.join(data_path, 'maps',self.phase)
-        self.cell_p = os.path.join(data_path,'map_mean' ,self.phase)
+        self.cell_p = os.path.join(data_path,'map_mean_nonth' ,self.phase)
         self.file_ = os.listdir(self.img_p)
         self.file_.sort(key=lambda x: int(x.split('.')[0].split('_')[2]))
         if(augment):
