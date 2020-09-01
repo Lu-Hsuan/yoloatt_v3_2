@@ -36,7 +36,7 @@ class Tester:
         if self.att_flag:
             self.att_model = yolo_att.Darkmean_stdnet("model_yoloatt/yoloatt.cfg")
             self.att_model.to(self.device)
-        self.att_model.load_state_dict(torch.load('model_yoloatt/yoloatt_w25.pth'))
+            self.att_model.load_state_dict(torch.load('model_yoloatt/yoloatt_w25.pth'))
         self.tar_shape_r,self.tar_shape_c = 480,640
 
         self.val_dataset = generator_SAL_metric(self.opt.data_path, "val", self.opt.height, self.opt.width)
