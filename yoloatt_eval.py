@@ -32,8 +32,10 @@ class Tester:
         self.device = 'cuda' if not self.opt.no_cuda else 'cpu'
         self.model = Darknet(opt.model_cfg)
         self.model.to(self.device)
-        self.att_model = yolo_att.Darkmean_stdnet("model_yoloatt/yoloatt.cfg")
-        self.att_model.to(self.device)
+        self.att_flag = False
+        if self.att_flag:
+            self.att_model = yolo_att.Darkmean_stdnet("model_yoloatt/yoloatt.cfg")
+            self.att_model.to(self.device)
         self.att_model.load_state_dict(torch.load('model_yoloatt/yoloatt_w25.pth'))
         self.tar_shape_r,self.tar_shape_c = 480,640
 
@@ -48,7 +50,7 @@ class Tester:
         self.writer  = {}
 
         self.load_model()
-
+        
     def val(self):
         i = 0
         NN = 0
@@ -58,14 +60,16 @@ class Tester:
                 N = img_.size()[0]
                 img_t = img_.to(self.device)
                 _,_,outputs = self.model(img_t)
-                att_outs = self.att_model(img_t)
+                if self.att_flag:
+                    att_outs = self.att_model(img_t)
                 out = outputs[-1][:,0,:,:]
                 out = out.reshape(out.size()[0],1,out.size()[-2],out.size()[-1])
-                att_out = att_outs[-1][:,0,:,:]
-                att_out = att_out.reshape(att_out.size()[0],1,att_out.size()[-2],att_out.size()[-1])
+                if self.att_flag:
+                    att_out = att_outs[-1][:,0,:,:]
+                    att_out = att_out.reshape(att_out.size()[0],1,att_out.size()[-2],att_out.size()[-1])
+                    att_logits = nn.functional.interpolate(att_out,size=[self.tar_shape_r,self.tar_shape_c],mode='bilinear')
                 #print(out.size())
                 logits = nn.functional.interpolate(out,size=[self.tar_shape_r,self.tar_shape_c],mode='bilinear')
-                att_logits = nn.functional.interpolate(att_out,size=[self.tar_shape_r,self.tar_shape_c],mode='bilinear')
                 map_p = logits.cpu().numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
                 map_g = map_.numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
                 fix_g = fix_.numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
@@ -81,17 +85,19 @@ class Tester:
                 i += 1
                 NN += N
                 print(i,end='\n')
-                img_s = img_[-1].cpu().numpy()*255
-                img_s = np.moveaxis(img_s,[0,1,2],[2,0,1])
-                img_s = img_s[:,:,::-1]
-                img_s = cv2.resize(img_s,(self.tar_shape_c,self.tar_shape_r))
-                map_g = map_g[-1][...,np.newaxis]*np.array([255,255,255])
-                map_p = map_p[-1][...,np.newaxis]*np.array([255,255,255])
-                map_a = att_logits.cpu().numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
-                map_a = map_a[-1][...,np.newaxis]*np.array([255,255,255])
+                if self.att_flag:
+                    img_s = img_[-1].cpu().numpy()*255
+                    img_s = np.moveaxis(img_s,[0,1,2],[2,0,1])
+                    img_s = img_s[:,:,::-1]
+                    img_s = cv2.resize(img_s,(self.tar_shape_c,self.tar_shape_r))
+                    map_g = map_g[-1][...,np.newaxis]*np.array([255,255,255])
+                    map_p = map_p[-1][...,np.newaxis]*np.array([255,255,255])
+                
+                    map_a = att_logits.cpu().numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
+                    map_a = map_a[-1][...,np.newaxis]*np.array([255,255,255])
                 #print(img_s.shape , map_g.shape, map_p.shape)
-                img_sa = np.concatenate([img_s,map_g,map_a,map_p],axis=1)
-                cv2.imwrite(f'{os.path.join(opt.log_path,"output_map")}/{img_nr[-1]}.png',np.round(img_sa))
+                    img_sa = np.concatenate([img_s,map_g,map_a,map_p],axis=1)
+                    cv2.imwrite(f'{os.path.join(opt.log_path,"output_map")}/{img_nr[-1]}.png',np.round(img_sa))
             #print(key)
                 if((i+1) % 50 == 0):
                     print(f"eval : {self.opt.weight} , AUC_J: {self.Metric_['AUC_J']/NN:4.4f} , s-AUC: {self.Metric_['s-AUC']/NN:4.4f} , NSS: {self.Metric_['NSS']/NN:4.4f}")
