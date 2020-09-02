@@ -6,7 +6,26 @@ from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 from torch.utils.data import DataLoader
+from utils.datasets import pad_to_square,resize
 
+def remove_padding(img,t_shape,r_shape):
+    h, w = t_shape[0],t_shape[1]
+    h_p,w_p = r_shape[0],r_shape[1]
+    dim_diff = np.abs(h - w)
+    # (upper / left) padding and (lower / right) padding
+    pad1, pad2 = dim_diff // 2, dim_diff - dim_diff // 2
+    # Determine padding
+    pad = [0, 0, pad1, pad2] if h <= w else [pad1, pad2, 0, 0]
+    print(pad)
+    if(w > h):
+        pad[2] = pad[2]*w_p//w
+        pad[3] = pad[3]*w_p//w
+    else:
+        pad[0] = pad[0]*h_p/h
+        pad[1] = pad[1]*h_p/h
+    img_p = img[pad[2]:h_p-pad[3],pad[0]:w_p-pad[1],...]
+    img_p = cv2.resize(img_p,(w,h))
+    return img_p
 class AddGaussianNoise(object):
     def __init__(self, mean=0., std=1.):
         self.std = std
@@ -17,7 +36,6 @@ class AddGaussianNoise(object):
         return t
     def __repr__(self):
         return self.__class__.__name__ + '(mean={0}, std={1})'.format(self.mean, self.std)
-
 class SALCell_Dataset(Dataset):
     def __init__(self, data_path, phase, shape_r, shape_c,augment=False, with_map=False):
         self.phase = phase
@@ -101,7 +119,7 @@ class SALCell_Dataset(Dataset):
 
 class generator_SAL_metric(Dataset):
     
-    def __init__(self,data_path, phase, shape_r, shape_c,file_list=None):
+    def __init__(self,data_path, phase, shape_r, shape_c,padding=False,file_list=None):
         self.phase = phase
         self.shape_r = shape_r
         self.shape_c = shape_c
@@ -119,20 +137,23 @@ class generator_SAL_metric(Dataset):
             self.file_ = [x.rstrip() for x in self.file_l] 
         self.file_.sort(key=lambda x: int(x.split('.')[0].split('_')[2]))
         self.data_num = len(self.file_)
-        self.transform_i = transforms.Compose([ 
-                        transforms.ToPILImage(),
-                        transforms.Resize((shape_r, shape_c),interpolation=cv2.INTER_LINEAR),
-                        transforms.ToTensor(),
-                        #transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                        #                    std=[0.229, 0.224, 0.225])
-                    ])
-        """
-        self.transform_m = transforms.Compose([ 
-                        transforms.ToPILImage(),
-                        transforms.Resize((tar_shape_r, tar_shape_c),interpolation=cv2.INTER_LINEAR),
-                        transforms.ToTensor()
-                    ])
-        """
+        self.padding = padding
+        if(self.padding == False):
+            self.transform_i = transforms.Compose([ 
+                            transforms.ToPILImage(),
+                            transforms.Resize((shape_r, shape_c),interpolation=cv2.INTER_LINEAR),
+                            transforms.ToTensor(),
+                            #transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                            #                    std=[0.229, 0.224, 0.225])
+                        ])
+        else:
+            self.transform_i = transforms.Compose([ 
+                            transforms.ToPILImage(),
+                            #transforms.Resize((shape_r, shape_c),interpolation=cv2.INTER_LINEAR),
+                            transforms.ToTensor(),
+                            #transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                            #                    std=[0.229, 0.224, 0.225])
+                        ])
         #random.shuffle(self.file_)
         print(f'Dataset : {self.phase} number : {self.data_num}')
     def __getitem__(self, index):
@@ -154,8 +175,11 @@ class generator_SAL_metric(Dataset):
 
         #map_i = np.expand_dims(map_i,axis=-1)
         #fix_i = np.expand_dims(fix_i,axis=-1)
-
         img_i = self.transform_i(img_i)
+        if(self.padding==True):
+            img_i, pad = pad_to_square(img_i, 0)
+            img_i = resize(img_i, [self.shape_r,self.shape_c])
+
         #map_i = self.transform_m(map_i)
         #fix_i = preprocess_fixmaps(fix_i,self.tar_shape_r,self.tar_shape_c)
         #print(img_i.size())
@@ -169,24 +193,28 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     from matplotlib.ticker import NullLocator
     #'''
-    train_dataset = SALCell_Dataset('D:/!@c++/D_DP_model/train_1', "train", 224, 320,augment=True)
+    train_dataset = generator_SAL_metric('D:/!@c++/D_DP_model/train_1', "train", 416,416,padding=True)
     #train_dataset = SALCell_Dataset('../data', "train", 224, 320,augment=True)
     train_dataloader = DataLoader(train_dataset,1, num_workers=2,
                                         shuffle=False, pin_memory=False, drop_last=True)
     img_p = r'D:\!@c++\D_DP_model\train_1\images\train'.replace('\\'[0],'/')
     img_file_ = os.listdir(img_p)
     i=0                    
-    for img_i,cell in train_dataloader:
+    for img_i,map_i,fix_i,img_nr_i in train_dataloader:
+        
         img_i = img_i[0].numpy()
         img_i = np.moveaxis(img_i,[0,1,2],[2,0,1])
-        cell = cell[-1][0].numpy()
-        print(img_i.shape,cell.shape)
+        img_p = remove_padding(img_i,[480,640],[416,416])
+        print(img_p.shape)
+        #cell = cell[-1][0].numpy()
+        #print(img_i.shape,cell.shape)
         fig,ax = plt.subplots(ncols=2,figsize=(8,4),dpi=100)
         ax[0].imshow(img_i)
-        ax[1].imshow(cell[0])
-        ax[0].axis("off")
-        ax[1].axis("off")
-        fig.savefig(f'!img/Dataset_{img_file_[i]}')
+        ax[1].imshow(img_p)
+        #ax[1].imshow(cell[0])
+        #ax[0].axis("off")
+        #ax[1].axis("off")
+        #fig.savefig(f'!img/Dataset_{img_file_[i]}')
         plt.show()
         print()
         i+=1
