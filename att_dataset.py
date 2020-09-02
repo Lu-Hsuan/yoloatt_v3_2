@@ -174,13 +174,14 @@ class generator_SAL_metric(Dataset):
         map_i = cv2.imread(str(map_file), cv2.IMREAD_GRAYSCALE)
         fix_i = cv2.imread(str(fix_file), cv2.IMREAD_GRAYSCALE)
 
-        #map_i = np.expand_dims(map_i,axis=-1)
-        #fix_i = np.expand_dims(fix_i,axis=-1)
+        
         img_i = self.transform_i(img_i)
         if(self.padding==True):
             img_i, pad = pad_to_square(img_i, 0)
             img_i = resize(img_i, [self.shape_r,self.shape_c])
             if(self.show_pad):
+                map_i = np.expand_dims(map_i,axis=-1)
+                fix_i = np.expand_dims(fix_i,axis=-1)
                 map_i, pad = pad_to_square(map_i, 0)
                 map_i = resize(map_i, [self.shape_r,self.shape_c])
                 fix_i, pad = pad_to_square(fix_i, 0)
