@@ -32,7 +32,7 @@ class Tester:
         self.device = 'cuda' if not self.opt.no_cuda else 'cpu'
         self.model = Darknet(opt.model_cfg)
         self.model.to(self.device)
-        self.att_flag = False
+        self.att_flag = True
         if self.att_flag:
             self.att_model = yolo_att.Darkmean_stdnet("model_yoloatt/yoloatt.cfg")
             self.att_model.to(self.device)
@@ -70,7 +70,7 @@ class Tester:
                     att_logits = nn.functional.interpolate(att_out,size=[self.pad_shape_r,self.pad_shape_c],mode='bilinear')
                 #print(out.size())
                 logits = nn.functional.interpolate(out,size=[self.pad_shape_r,self.pad_shape_c],mode='bilinear')
-                map_p = logits.cpu().numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
+                map_p = logits.cpu().numpy().reshape(N,self.pad_shape_r,self.pad_shape_c)
                 map_g = map_.numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
                 fix_g = fix_.numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
                 #print(map_p.shape,map_g.shape,fix_g.shape)
