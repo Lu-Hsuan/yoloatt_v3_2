@@ -99,6 +99,7 @@ class Tester:
                     map_a = map_aa[...,np.newaxis]*np.array([255,255,255])
                 #print(img_s.shape , map_g.shape, map_p.shape)
                     img_sa = np.concatenate([img_s,map_g,map_a,map_p],axis=1)
+                    #print(img_sa.shape)
                     cv2.imwrite(f'{os.path.join(opt.log_path,"output_map_pad")}/{img_nr[-1]}.png',np.round(img_sa))
             #print(key)
                 if((i+1) % 50 == 0):
@@ -147,7 +148,7 @@ class Tester:
 if __name__ == '__main__':
     torch.backends.cudnn.deterministic =True
     opt = YOLOATT_OPTION().parse()
-    path = os.path.join(opt.log_path,'output_map')
+    path = os.path.join(opt.log_path,'output_map_pad')
     os.makedirs(path,exist_ok=True)
 
     yolo_trainer = Tester(opt)
