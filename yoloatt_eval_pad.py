@@ -99,7 +99,7 @@ class Tester:
                     map_a = map_aa[...,np.newaxis]*np.array([255,255,255])
                 #print(img_s.shape , map_g.shape, map_p.shape)
                     img_sa = np.concatenate([img_s,map_g,map_a,map_p],axis=1)
-                    cv2.imwrite(f'{os.path.join(opt.log_path,"output_map")}/{img_nr[-1]}.png',np.round(img_sa))
+                    cv2.imwrite(f'{os.path.join(opt.log_path,"output_map_pad")}/{img_nr[-1]}.png',np.round(img_sa))
             #print(key)
                 if((i+1) % 50 == 0):
                     print(f"eval : {self.opt.weight} , AUC_J: {self.Metric_['AUC_J']/NN:4.4f} , s-AUC: {self.Metric_['s-AUC']/NN:4.4f} , NSS: {self.Metric_['NSS']/NN:4.4f}")
