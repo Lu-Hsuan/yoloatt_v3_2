@@ -119,7 +119,7 @@ class SALCell_Dataset(Dataset):
 
 class generator_SAL_metric(Dataset):
     
-    def __init__(self,data_path, phase, shape_r, shape_c,padding=False,file_list=None):
+    def __init__(self,data_path, phase, shape_r, shape_c,padding=False,show_pad=False,file_list=None):
         self.phase = phase
         self.shape_r = shape_r
         self.shape_c = shape_c
@@ -138,6 +138,7 @@ class generator_SAL_metric(Dataset):
         self.file_.sort(key=lambda x: int(x.split('.')[0].split('_')[2]))
         self.data_num = len(self.file_)
         self.padding = padding
+        self.show_pad = show_pad
         if(self.padding == False):
             self.transform_i = transforms.Compose([ 
                             transforms.ToPILImage(),
@@ -179,7 +180,11 @@ class generator_SAL_metric(Dataset):
         if(self.padding==True):
             img_i, pad = pad_to_square(img_i, 0)
             img_i = resize(img_i, [self.shape_r,self.shape_c])
-
+            if(self.show_pad):
+                map_i, pad = pad_to_square(map_i, 0)
+                map_i = resize(map_i, [self.shape_r,self.shape_c])
+                fix_i, pad = pad_to_square(fix_i, 0)
+                fix_i = resize(fix_i, [self.shape_r,self.shape_c])
         #map_i = self.transform_m(map_i)
         #fix_i = preprocess_fixmaps(fix_i,self.tar_shape_r,self.tar_shape_c)
         #print(img_i.size())

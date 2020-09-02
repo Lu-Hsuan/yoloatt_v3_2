@@ -39,7 +39,8 @@ class Tester:
             self.att_model.load_state_dict(torch.load('model_yoloatt/yoloatt_w25.pth'))
         self.tar_shape_r,self.tar_shape_c = 480,640
         self.pad_shape_r,self.pad_shape_c = 416,416
-        self.val_dataset = generator_SAL_metric(self.opt.data_path, "val", self.pad_shape_r,self.pad_shape_c,padding=True)
+        self.show_pad = True
+        self.val_dataset = generator_SAL_metric(self.opt.data_path, "val", self.pad_shape_r,self.pad_shape_c,padding=True,show_pad=self.show_pad)
         self.val_dataloader = DataLoader(self.val_dataset, self.opt.batch_size, num_workers=self.opt.num_workers,
                                             shuffle=False, pin_memory=True, drop_last=False)
 
@@ -71,14 +72,19 @@ class Tester:
                 #print(out.size())
                 logits = nn.functional.interpolate(out,size=[self.pad_shape_r,self.pad_shape_c],mode='bilinear')
                 map_p = logits.cpu().numpy().reshape(N,self.pad_shape_r,self.pad_shape_c)
-                map_g = map_.numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
-                fix_g = fix_.numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
+                if(self.show_pad == False):
+                    map_g = map_.numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
+                    fix_g = fix_.numpy().reshape(N,self.tar_shape_r,self.tar_shape_c)
+                else:
+                    map_g = map_.numpy().reshape(N,self.pad_shape_r,self.pad_shape_c)
+                    fix_g = fix_.numpy().reshape(N,self.pad_shape_r,self.pad_shape_c)
                 #print(map_p.shape,map_g.shape,fix_g.shape)
                 for k in range(N):
                     #map_p_ = cv2.resize(map_p[k], (fix_.shape[-1], fix_.shape[-2]),interpolation=cv2.INTER_LINEAR)
                     #self.Metric_['AUC_J'] += auc_judd(map_p[k],fix_g[k])
                     #self.Metric_['s-AUC'] += auc_shuff_acl(map_p[k],fix_g[k],next(self.o_g))
-                    map_pp = remove_padding(map_p[k],[self.tar_shape_r,self.tar_shape_c],[self.pad_shape_r,self.pad_shape_c])
+                    if(self.show_pad == False):
+                        map_pp = remove_padding(map_p[k],[self.tar_shape_r,self.tar_shape_c],[self.pad_shape_r,self.pad_shape_c])
                     self.Metric_['NSS'] += nss(map_pp,fix_g[k])
                     self.Metric_['SIM'] += similarity(map_pp,map_g[k])
                     self.Metric_['CC'] += cc(map_pp,map_g[k])
@@ -90,12 +96,16 @@ class Tester:
                     img_s = img_[-1].cpu().numpy()*255
                     img_s = np.moveaxis(img_s,[0,1,2],[2,0,1])
                     img_s = img_s[:,:,::-1]
-                    img_s = remove_padding(img_s,[self.tar_shape_r,self.tar_shape_c],[self.pad_shape_r,self.pad_shape_c])
+                    if(self.show_pad == False):
+                        img_s = remove_padding(img_s,[self.tar_shape_r,self.tar_shape_c],[self.pad_shape_r,self.pad_shape_c])
                     map_g = map_g[-1][...,np.newaxis]*np.array([255,255,255])
                     map_p = map_pp[...,np.newaxis]*np.array([255,255,255])
                 
                     map_a = att_logits.cpu().numpy().reshape(N,self.pad_shape_r,self.pad_shape_c)
-                    map_aa = remove_padding(map_a[-1],[self.tar_shape_r,self.tar_shape_c],[self.pad_shape_r,self.pad_shape_c])
+                    if(self.show_pad == False):
+                        map_aa = remove_padding(map_a[-1],[self.tar_shape_r,self.tar_shape_c],[self.pad_shape_r,self.pad_shape_c])
+                    else:
+                        map_aa = map_a[-1]
                     map_a = map_aa[...,np.newaxis]*np.array([255,255,255])
                 #print(img_s.shape , map_g.shape, map_p.shape)
                     img_sa = np.concatenate([img_s,map_g,map_a,map_p],axis=1)
