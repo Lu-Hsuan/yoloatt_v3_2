@@ -90,7 +90,7 @@ class Tester:
                     img_s = img_[-1].cpu().numpy()*255
                     img_s = np.moveaxis(img_s,[0,1,2],[2,0,1])
                     img_s = img_s[:,:,::-1]
-                    img_s = cv2.resize(img_s,(self.tar_shape_c,self.tar_shape_r))
+                    img_s = remove_padding(img_s,[self.tar_shape_r,self.tar_shape_c],[self.pad_shape_r,self.pad_shape_c])
                     map_g = map_g[-1][...,np.newaxis]*np.array([255,255,255])
                     map_p = map_pp[...,np.newaxis]*np.array([255,255,255])
                 
