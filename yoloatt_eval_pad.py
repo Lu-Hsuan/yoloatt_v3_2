@@ -32,14 +32,14 @@ class Tester:
         self.device = 'cuda' if not self.opt.no_cuda else 'cpu'
         self.model = Darknet(opt.model_cfg)
         self.model.to(self.device)
-        self.att_flag = True
+        self.att_flag = False
         if self.att_flag:
             self.att_model = yolo_att.Darkmean_stdnet("model_yoloatt/yoloatt.cfg")
             self.att_model.to(self.device)
             self.att_model.load_state_dict(torch.load('model_yoloatt/yoloatt_w25.pth'))
         self.tar_shape_r,self.tar_shape_c = 480,640
         self.pad_shape_r,self.pad_shape_c = 416,416
-        self.show_pad = True
+        self.show_pad = False
         self.val_dataset = generator_SAL_metric(self.opt.data_path, "val", self.pad_shape_r,self.pad_shape_c,padding=True,show_pad=self.show_pad)
         self.val_dataloader = DataLoader(self.val_dataset, self.opt.batch_size, num_workers=self.opt.num_workers,
                                             shuffle=False, pin_memory=True, drop_last=False)
