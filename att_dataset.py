@@ -134,7 +134,7 @@ class generator_SAL_metric(Dataset):
         else:
             with open(file_list, "r") as file:
                 self.file_l = file.readlines()
-            self.file_ = [x.rstrip() for x in self.file_l] 
+            self.file_ = [x.rstrip() for x in self.file_l]
         self.file_.sort(key=lambda x: int(x.split('.')[0].split('_')[2]))
         self.data_num = len(self.file_)
         self.padding = padding
