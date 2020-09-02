@@ -182,13 +182,14 @@ class generator_SAL_metric(Dataset):
             if(self.show_pad):
                 map_i = np.expand_dims(map_i,axis=-1)
                 fix_i = np.expand_dims(fix_i,axis=-1)
+                map_i = transforms.ToTensor()(map_i)
+                fix_i = transforms.ToTensor()(fix_i)
                 map_i, pad = pad_to_square(map_i, 0)
                 map_i = resize(map_i, [self.shape_r,self.shape_c])
                 fix_i, pad = pad_to_square(fix_i, 0)
                 fix_i = resize(fix_i, [self.shape_r,self.shape_c])
-        #map_i = self.transform_m(map_i)
-        #fix_i = preprocess_fixmaps(fix_i,self.tar_shape_r,self.tar_shape_c)
-        #print(img_i.size())
+                return img_i,map_i,fix_i,img_nr
+
         return img_i,map_i/255.,fix_i/255.,img_nr
     def __len__(self):
         ##############################################

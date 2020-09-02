@@ -85,6 +85,8 @@ class Tester:
                     #self.Metric_['s-AUC'] += auc_shuff_acl(map_p[k],fix_g[k],next(self.o_g))
                     if(self.show_pad == False):
                         map_pp = remove_padding(map_p[k],[self.tar_shape_r,self.tar_shape_c],[self.pad_shape_r,self.pad_shape_c])
+                    else:
+                        map_pp = map_p[k]
                     self.Metric_['NSS'] += nss(map_pp,fix_g[k])
                     self.Metric_['SIM'] += similarity(map_pp,map_g[k])
                     self.Metric_['CC'] += cc(map_pp,map_g[k])
