@@ -150,8 +150,8 @@ class YOLOLayer(nn.Module):
         # Tensors for cuda support
 
 
-        if targets is None:
-            return None, None
+        #if targets is None:
+        #    return None, None
 
         FloatTensor = torch.cuda.FloatTensor if x.is_cuda else torch.FloatTensor
         LongTensor = torch.cuda.LongTensor if x.is_cuda else torch.LongTensor
@@ -194,7 +194,8 @@ class YOLOLayer(nn.Module):
             ),
             -1,
         )
-
+        if targets is None:
+            return output, None
         ##########################################################################################
 
         iou_scores, class_mask, obj_mask, noobj_mask, tx, ty, tw, th, tcls, tconf = build_targets(
@@ -285,6 +286,7 @@ class Darknet(nn.Module):
 
         
         if targets is None:
+            yolo_outputs = to_cpu(torch.cat(yolo_outputs, 1))
             return None, yolo_outputs, depth_outputs
         else:
             yolo_outputs = to_cpu(torch.cat(yolo_outputs, 1))
