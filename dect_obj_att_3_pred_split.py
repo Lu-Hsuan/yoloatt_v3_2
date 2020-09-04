@@ -23,6 +23,21 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.ticker import NullLocator
 
+import cv2
+
+def save_img(save_path,img):
+    img = np.round(img*255)
+    cv2.imwrite(f'{save_path}.png',img)
+
+def set_plt_img(fig,save_path):
+    fig.set_size_inches(640/400.,480/400.)
+    plt.gca().xaxis.set_major_locator(plt.NullLocator())
+    plt.gca().yaxis.set_major_locator(plt.NullLocator())
+    plt.subplots_adjust(top=1,bottom=0,left=0,right=1,hspace=0,wspace=0)
+    plt.margins(0,0)
+    fig.savefig(f"{save_path}.png", bbox_inches="tight", pad_inches=0.0,dpi=400)
+    plt.close()
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_path", type=str, default="../data", help="path to dataset")
@@ -43,6 +58,8 @@ if __name__ == "__main__":
     os.makedirs(opt.out_path, exist_ok=True)
 
     # Set up model
+    # model = Darknet('For_YOLOv3/yolov3_rect.cfg').to(device)
+    # init_w ='../weights/yolov3_w.pth'
     model = Darknet(opt.model_def).to(device)
     init_w ='../weights/yoloatt_v3_split_w.pth'
     model.load_state_dict(torch.load(init_w))
@@ -91,7 +108,12 @@ if __name__ == "__main__":
         # Save image and detections
         if(batch_i == 5+init):
             break
+
+    torch.cuda.empty_cache()
+    torch.cuda.synchronize()
+
     print('load '+opt.weights_path)
+    model = Darknet(opt.model_def).to(device)
     model.load_state_dict(torch.load(opt.weights_path))
     dataset = generator_SAL_metric(opt.data_path,"val",in_shape_r,in_shape_c,file_list='../data/common_sal.txt')
     dataloader = torch.utils.data.DataLoader(
@@ -141,8 +163,8 @@ if __name__ == "__main__":
     for img_i, (path,pre_detections, detections,map_p,map_g) in enumerate(zip(imgs, img_detections_pre,img_detections,map_p_list,map_g_list)):
 
         print("(%d) Image: '%s'" % (img_i, path))
-        #save_p = f"{opt.out_path}/ident/{path}"
-        #os.makedirs(save_p,exist_ok=True)
+        save_p = f"{opt.out_path}/ident/{path}"
+        os.makedirs(save_p,exist_ok=True)
         path = f'/work/luhsuan0223/data/coco/images/val2014/{path}.jpg'
         # Create plot
 
@@ -151,20 +173,16 @@ if __name__ == "__main__":
         #print(label_path)
         target_gt = torch.from_numpy(np.loadtxt(label_path).reshape(-1, 5))
         #print(target_gt)
-        plt.figure()
-        fig, ax = plt.subplots(ncols=5,num='Total')
-        ax[0].imshow(img)
-        ax[1].imshow(img)
-        ax[2].imshow(img)
-        ax[3].imshow(map_g,cmap=plt.cm.gray)
-        ax[4].imshow(map_p,cmap=plt.cm.gray)
-        ax[0].axis("off")
-        ax[1].axis("off")
-        ax[2].axis("off")
-        ax[3].axis("off")
-        ax[4].axis("off")
-        
+        save_img(f'{save_p}/map_GT',map_g)
+        save_img(f'{save_p}/map_Pred',map_p)
+        cv2.imwrite(f'{save_p}/img.png',cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+        #fig, ax = plt.subplots(ncols=5,num='Total')
         # Draw bounding boxes and labels of detections
+        #"""
+        
+        fig, ax = plt.subplots()
+        ax.imshow(img)
+        ax.axis('off')
         if detections is not None:
             # Rescale boxes to original image
             #detections = rescale_boxes(detections, opt.img_size, img.shape[:2])
@@ -189,9 +207,9 @@ if __name__ == "__main__":
                 # Create a Rectangle patch
                 bbox = patches.Rectangle((x1, y1), box_w, box_h, linewidth=1, edgecolor=color, facecolor="none")
                 # Add the bbox to the plot
-                ax[2].add_patch(bbox)
+                ax.add_patch(bbox)
                 # Add label
-                ax[2].text(
+                ax.text(
                     x1,
                     y1,
                     s=classes[int(cls_pred)],
@@ -200,7 +218,11 @@ if __name__ == "__main__":
                     bbox={"color": color, "pad": 0},
                     fontsize=2
                 )
-
+        set_plt_img(fig,f'{save_p}/yoloatt_obj_pred')
+        #'''
+        fig, ax = plt.subplots()
+        ax.imshow(img)
+        ax.axis('off')
         if pre_detections is not None:
             # Rescale boxes to original image
             w_factor = img.shape[1]/in_shape_c
@@ -224,9 +246,9 @@ if __name__ == "__main__":
                 # Create a Rectangle patch
                 bbox = patches.Rectangle((x1, y1), box_w, box_h, linewidth=1, edgecolor=color, facecolor="none")
                 # Add the bbox to the plot
-                ax[1].add_patch(bbox)
+                ax.add_patch(bbox)
                 # Add label
-                ax[1].text(
+                ax.text(
                     x1,
                     y1,
                     s=classes[int(cls_pred)],
@@ -235,6 +257,11 @@ if __name__ == "__main__":
                     bbox={"color": color, "pad": 0},
                     fontsize=2
                 )
+        set_plt_img(fig,f'{save_p}/yolov3_obj_pred')
+        #'''
+        fig, ax = plt.subplots()
+        ax.imshow(img)
+        ax.axis('off')
         if target_gt is not None:
             # Rescale boxes to original image
             #print(len(target_gt))
@@ -267,10 +294,10 @@ if __name__ == "__main__":
                 # Create a Rectangle patch
                 bbox = patches.Rectangle((x1, y1), box_w, box_h, linewidth=1, edgecolor=color, facecolor="none")
                 # Add the bbox to the plot
-                ax[0].add_patch(bbox)
+                ax.add_patch(bbox)
                 # Add label
                 #'''
-                ax[0].text(
+                ax.text(
                     x1,
                     y1,
                     s=classes[int(cls_pred)],
@@ -280,19 +307,4 @@ if __name__ == "__main__":
                     fontsize=2
                 )
                 #'''
-        
-        # Save generated image with detections
-        
-        #plt.gca().xaxis.set_major_locator(NullLocator())
-        #plt.gca().yaxis.set_major_locator(NullLocator())
-        filename = path.split("/")[-1].split(".")[0]
-        fig.set_size_inches(2000/100.0/4.0, 800/100.0/4.0)
-        plt.gca().xaxis.set_major_locator(plt.NullLocator())
-        plt.gca().yaxis.set_major_locator(plt.NullLocator())
-        plt.subplots_adjust(top=1,bottom=0,left=0,right=1,hspace=0,wspace=0)
-        plt.margins(0,0)
-        #ax_dic = {'obj_GT':ax[0],'yolo':ax[1],'yoloatt_v3_obj':ax[2],'map_GT':ax[3],'yoloatt_att':ax[4]}
-        #for k,ax_ in ax_dic.items():
-            
-        fig.savefig(f"{opt.out_path}/{filename}.png", bbox_inches="tight", pad_inches=0.0,dpi=400)
-        plt.close()
+        set_plt_img(fig,f'{save_p}/obj_GT')
