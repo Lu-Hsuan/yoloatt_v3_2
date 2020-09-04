@@ -72,7 +72,7 @@ def create_modules(module_defs):
             anchors = [(anchors[i], anchors[i + 1]) for i in range(0, len(anchors), 2)]
             anchors = [anchors[i] for i in anchor_idxs]
             num_classes = int(module_def["classes"])
-            img_size = int(hyperparams["height"])
+            img_size = int(hyperparams["height"]), int(hyperparams["width"])
             # Define detection layer
             yolo_layer = YOLOLayer(anchors, num_classes, img_size)
             modules.add_module(f"yolo_{module_i}", yolo_layer)
@@ -158,12 +158,11 @@ class YOLOLayer(nn.Module):
         self.anchor_w = self.scaled_anchors[:, 0:1].view((1, self.num_anchors, 1, 1))
         self.anchor_h = self.scaled_anchors[:, 1:2].view((1, self.num_anchors, 1, 1))
 
-    def forward(self, x, targets=None, img_dim=None):
+    def forward(self, x, targets=None):
         FloatTensor = torch.cuda.FloatTensor if x.is_cuda else torch.FloatTensor
         LongTensor = torch.cuda.LongTensor if x.is_cuda else torch.LongTensor
         ByteTensor = torch.cuda.ByteTensor if x.is_cuda else torch.ByteTensor
 
-        self.img_dim = img_dim
         num_samples = x.size(0)
         grid_size_x = x.size(-1)
         grid_size_y = x.size(-2)
@@ -277,7 +276,6 @@ class Darknet(nn.Module):
         self.header_info = np.array([0, 0, 0, self.seen, 0], dtype=np.int32)
 
     def forward(self, x, targets=None):
-        img_dim = x.shape[2:4]
         loss = 0
         layer_outputs, yolo_outputs, depth_outputs = [], [], []
         for i, (module_def, module) in enumerate(zip(self.module_defs, self.module_list)):
@@ -289,7 +287,7 @@ class Darknet(nn.Module):
                 layer_i = int(module_def["from"])
                 x = layer_outputs[-1] + layer_outputs[layer_i]
             elif module_def["type"] == "yolo":
-                x, layer_loss = module[0](x, targets, img_dim)               
+                x, layer_loss = module[0](x, targets)               
                 if layer_loss is not None:
                     loss += layer_loss
                 yolo_outputs.append(x)
