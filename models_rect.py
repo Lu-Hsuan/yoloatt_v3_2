@@ -299,6 +299,7 @@ class Darknet(nn.Module):
 
         
         if targets is None:
+            yolo_outputs = to_cpu(torch.cat(yolo_outputs, 1))
             return None, yolo_outputs, depth_outputs
         else:
             yolo_outputs = to_cpu(torch.cat(yolo_outputs, 1))
@@ -386,9 +387,9 @@ class Darknet(nn.Module):
         fp.close()
 
 if __name__ == "__main__":
-    model = Darknet("yoloatt_v3_split.cfg")
-    d=torch.rand(2,3,416,416)
+    model = Darknet("For_YOLOv3/yolov3_rect.cfg")
+    d=torch.rand(2,3,224,320)
     targets = torch.rand((4,6))
     l,des,y = model(d,targets=None)
-    print(y[-1].size())
+    #print(y[-1].size())
     print(l,des.size())
