@@ -89,7 +89,7 @@ if __name__ == "__main__":
         imgs.extend(img_paths)
         img_detections_pre.extend(detections)
         # Save image and detections
-        if(batch_i == 5+init):
+        if(batch_i == 10+init):
             break
     print('load '+opt.weights_path)
     model = Darknet(opt.model_def).to(device)
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         map_p_list.extend(list(map_p[:,...]))
         map_g_list.extend(list(map_g.cpu().numpy()[:,...]))
         # Save image and detections
-        if(batch_i == 5+init):
+        if(batch_i == 10+init):
             break
     # try:
     #     os._exit(0)
