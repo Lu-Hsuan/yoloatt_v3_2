@@ -385,8 +385,8 @@ if __name__ == "__main__":
     #             param.requires_grad = False
     # #model.apply(fix_bn)
     #"""
-    w1 = '!weight/yoloatt_v3_split_w.pth'
-    w2 =  '!epoch\epoch_yolos_frozen_2\yoloatt_v3_1.pth'
+    w1 = '!weight/yolov3_w_2.pth'
+    w2 =  '!weight/yoloatt_v3_split_w.pth'
     stat1 = torch.load(w1)
     stat2 = torch.load(w2)
     for ((k1,v1),(k2,v2)) in zip(stat1.items(),stat2.items()):

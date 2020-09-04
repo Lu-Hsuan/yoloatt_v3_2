@@ -39,6 +39,7 @@ def set_plt_img(fig,save_path):
     plt.close()
 
 if __name__ == "__main__":
+    torch.backends.cudnn.deterministic =True
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_path", type=str, default="../data", help="path to dataset")
     parser.add_argument("--model_def", type=str, default="./yoloatt_v3_split_rect.cfg", help="path to model definition file")
@@ -58,6 +59,7 @@ if __name__ == "__main__":
     os.makedirs(opt.out_path, exist_ok=True)
 
     # Set up model
+    
     model = Darknet('For_YOLOv3/yolov3_rect.cfg').to(device)
     init_w ='../weights/yolov3_w.pth'
     # model = Darknet(opt.model_def).to(device)
@@ -114,6 +116,7 @@ if __name__ == "__main__":
 
     print('load '+opt.weights_path)
     model = Darknet(opt.model_def).to(device)
+    model.eval()
     model.load_state_dict(torch.load(opt.weights_path))
     dataset = generator_SAL_metric(opt.data_path,"val",in_shape_r,in_shape_c,file_list='../data/common_sal.txt')
     dataloader = torch.utils.data.DataLoader(
