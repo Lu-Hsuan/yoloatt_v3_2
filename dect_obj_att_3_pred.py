@@ -200,7 +200,12 @@ if __name__ == "__main__":
                 )
         if pre_detections is not None:
             # Rescale boxes to original image
-            pre_detections = rescale_boxes(pre_detections, opt.img_size, img.shape[:2])
+            w_factor = img.shape[1]/in_shape_c
+            h_factor = img.shape[0]/in_shape_r
+            pre_detections[:,0] *= w_factor
+            pre_detections[:,2] *= w_factor
+            pre_detections[:,1] *= h_factor
+            pre_detections[:,3] *= h_factor
             print(pre_detections)
             unique_labels = pre_detections[:, -1].cpu().unique()
             n_cls_preds = len(unique_labels)
