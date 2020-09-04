@@ -58,10 +58,10 @@ if __name__ == "__main__":
     os.makedirs(opt.out_path, exist_ok=True)
 
     # Set up model
-    # model = Darknet('For_YOLOv3/yolov3_rect.cfg').to(device)
-    # init_w ='../weights/yolov3_w.pth'
-    model = Darknet(opt.model_def).to(device)
-    init_w ='../weights/yoloatt_v3_split_w.pth'
+    model = Darknet('For_YOLOv3/yolov3_rect.cfg').to(device)
+    init_w ='../weights/yolov3_w.pth'
+    # model = Darknet(opt.model_def).to(device)
+    # init_w ='../weights/yoloatt_v3_split_w.pth'
     model.load_state_dict(torch.load(init_w))
     model.eval()  # Set in evaluation mode
     classes = load_classes(opt.class_path)  # Extracts class labels from file
@@ -109,8 +109,8 @@ if __name__ == "__main__":
         if(batch_i == 5+init):
             break
 
-    torch.cuda.empty_cache()
-    torch.cuda.synchronize()
+    #torch.cuda.empty_cache()
+    #torch.cuda.synchronize()
 
     print('load '+opt.weights_path)
     model = Darknet(opt.model_def).to(device)
