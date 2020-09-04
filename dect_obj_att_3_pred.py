@@ -39,12 +39,12 @@ if __name__ == "__main__":
     print(opt)
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
     os.makedirs(opt.out_path, exist_ok=True)
-
     # Set up model
-    model = Darknet(opt.model_def).to(device)
-    init_w ='../weights/yoloatt_v3_split_w.pth'
+    model = Darknet('For_YOLOv3/yolov3_rect.cfg').to(device)
+    init_w ='../weights/yolov3_w.pth'
+    # model = Darknet(opt.model_def).to(device)
+    # init_w ='../weights/yoloatt_v3_split_w.pth'
     model.load_state_dict(torch.load(init_w))
     model.eval()  # Set in evaluation mode
     classes = load_classes(opt.class_path)  # Extracts class labels from file
@@ -92,6 +92,8 @@ if __name__ == "__main__":
         if(batch_i == 5+init):
             break
     print('load '+opt.weights_path)
+    model = Darknet(opt.model_def).to(device)
+    model.eval()
     model.load_state_dict(torch.load(opt.weights_path))
     dataset = generator_SAL_metric(opt.data_path,"val",in_shape_r,in_shape_c,file_list='../data/common_sal.txt')
     dataloader = torch.utils.data.DataLoader(
