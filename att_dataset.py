@@ -196,6 +196,66 @@ class generator_SAL_metric(Dataset):
         ### Indicate the total size of the dataset
         ##############################################
         return self.data_num
+class generator_SAL_test(Dataset):
+    
+    def __init__(self,data_path, shape_r,shape_c,padding=False,file_list=None):
+        self.shape_r = shape_r
+        self.shape_c = shape_c
+        #self.batch_size = batch_size
+        self.img_p = data_path
+        self.count = 0
+        if(file_list==None):
+            self.file_ = os.listdir(self.img_p)
+        else:
+            with open(file_list, "r") as file:
+                self.file_l = file.readlines()
+            self.file_ = [x.rstrip() for x in self.file_l]
+        self.file_.sort()
+        self.data_num = len(self.file_)
+        self.padding = padding
+        if(self.padding == False):
+            self.transform_i = transforms.Compose([ 
+                            transforms.ToPILImage(),
+                            transforms.Resize((shape_r, shape_c),interpolation=cv2.INTER_LINEAR),
+                            transforms.ToTensor(),
+                            #transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                            #                    std=[0.229, 0.224, 0.225])
+                        ])
+        else:
+            self.transform_i = transforms.Compose([ 
+                            transforms.ToPILImage(),
+                            #transforms.Resize((shape_r, shape_c),interpolation=cv2.INTER_LINEAR),
+                            transforms.ToTensor(),
+                            #transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                            #                    std=[0.229, 0.224, 0.225])
+                        ])
+        #random.shuffle(self.file_)
+        print(f'Dataset : {self.img_p}  number : {self.data_num}')
+    def __getitem__(self, index):
+        ##############################################
+        # 1. Read from file (using numpy.fromfile, PIL.Image.open)
+        # 2. Preprocess the data (torchvision.Transform).
+        # 3. Return the data (e.g. image and label)
+        ##############################################
+        img_nr = self.file_[index]
+        #print(img_nr)
+        img_file = f'{self.img_p}/{img_nr}'
+        #print(img_file)
+        img_i = cv2.imread(str(img_file))
+        img_i = cv2.cvtColor(img_i,cv2.COLOR_BGR2RGB)
+        img_i = self.transform_i(img_i)
+
+        if(self.padding==True):
+            img_i, pad = pad_to_square(img_i, 0)
+            img_i = resize(img_i, [self.shape_r,self.shape_c])
+
+        #img_nr = self.file_[index].split('.')[0]
+        return img_i,img_nr
+    def __len__(self):
+        ##############################################
+        ### Indicate the total size of the dataset
+        ##############################################
+        return self.data_num
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     from matplotlib.ticker import NullLocator
