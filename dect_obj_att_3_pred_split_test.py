@@ -129,9 +129,9 @@ def draw_obj_box(obj_,ax,colors,classes,pre_obj=None,area_mean=False,mean_=None,
         # Add label
         if area_mean == True:
             sum_mean,sum_std = sum_area(x1,x2,y1,y2,mean_,std_)
-            str_ = f'{classes[int(cls_pred)]}_F:{conf.item():.2f}_M:{sum_mean:.3f}'
+            str_ = f'{classes[int(cls_pred)]}_C:{conf.item()*cls_conf.item():.2f}_S:{sum_mean:.3f}'
         else:
-            str_ = f'{classes[int(cls_pred)]}_F:{conf.item():.2f}'
+            str_ = f'{classes[int(cls_pred)]}_C:{conf.item()*cls_conf.item():.2f}'
         ax.text(
             x1,
             y1,
@@ -296,9 +296,9 @@ if __name__ == "__main__":
             ax[idx].axis('off')
             if('map' in k):
                 ax[idx].imshow(v,cmap=plt.cm.gray)
-                ax[idx].plot(max_x.cpu(),max_y.cpu(),'ro',markersize=1)
+                #ax[idx].plot(max_x.cpu(),max_y.cpu(),'ro',markersize=1)
             else:
                 ax[idx].imshow(v)
             ax[idx].set_title(k,fontdict={'fontsize':4})
             idx += 1
-        set_plt_img(fig,f'{opt.out_path}/{path}',img_size_r=img.shape[0]*idx,img_size_c=img.shape[1]*idx)
+        set_plt_img(fig,f"{opt.out_path}/{path.split('.')[0]}",img_size_r=img.shape[0]*idx,img_size_c=img.shape[1]*idx)
