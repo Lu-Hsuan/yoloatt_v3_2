@@ -29,8 +29,8 @@ def save_img(save_path,img):
     img = np.round(img*255)
     cv2.imwrite(f'{save_path}.png',img)
 
-def set_plt_img(fig,save_path):
-    fig.set_size_inches(640/400.,480/400.)
+def set_plt_img(fig,save_path,img_size_r=480,img_size_c=640):
+    fig.set_size_inches(img_size_c/400.,img_size_r/400.)
     plt.gca().xaxis.set_major_locator(plt.NullLocator())
     plt.gca().yaxis.set_major_locator(plt.NullLocator())
     plt.subplots_adjust(top=1,bottom=0,left=0,right=1,hspace=0,wspace=0)
@@ -168,11 +168,11 @@ if __name__ == "__main__":
         print("(%d) Image: '%s'" % (img_i, path))
         save_p = f"{opt.out_path}/ident/{path}"
         os.makedirs(save_p,exist_ok=True)
-        path = f'/work/luhsuan0223/data/coco/images/val2014/{path}.jpg'
+        path_ = f'/work/luhsuan0223/data/coco/images/val2014/{path}.jpg'
         # Create plot
 
-        img = np.array(Image.open(path))
-        label_path = path.replace("images", "labels").replace(".png", ".txt").replace(".jpg", ".txt")
+        img = np.array(Image.open(path_))
+        label_path = path_.replace("images", "labels").replace(".png", ".txt").replace(".jpg", ".txt")
         #print(label_path)
         target_gt = torch.from_numpy(np.loadtxt(label_path).reshape(-1, 5))
         #print(target_gt)
@@ -222,7 +222,7 @@ if __name__ == "__main__":
                     fontsize=2
                 )
         set_plt_img(fig,f'{save_p}/yoloatt_obj_pred')
-        #'''
+        '''
         fig, ax = plt.subplots()
         ax.imshow(img)
         ax.axis('off')
@@ -261,7 +261,7 @@ if __name__ == "__main__":
                     fontsize=2
                 )
         set_plt_img(fig,f'{save_p}/yolov3_obj_pred')
-        #'''
+        '''
         fig, ax = plt.subplots()
         ax.imshow(img)
         ax.axis('off')
@@ -311,3 +311,21 @@ if __name__ == "__main__":
                 )
                 #'''
         set_plt_img(fig,f'{save_p}/obj_GT')
+
+        img_obj = np.array(Image.open(f'{save_p}/yoloatt_obj_pred.png'))
+        img_obj_GT = np.array(Image.open(f'{save_p}/obj_GT.png'))
+
+        #img_salobj = np.array(Image.open(f'{save_p}/yoloatt_salobj_pred.png'))
+        fig, ax = plt.subplots(ncols=5,num='Total')
+        img_dic = {'img':img,'obj_GT':img_obj_GT,'obj_pred':img_obj,'map_GT':map_g,'map_pred':map_p}
+        idx = 0
+        for k,v in img_dic.items():
+            ax[idx].axis('off')
+            if('map' in k):
+                ax[idx].imshow(v,cmap=plt.cm.gray)
+                #ax[idx].plot(max_x.cpu(),max_y.cpu(),'ro',markersize=1)
+            else:
+                ax[idx].imshow(v)
+            ax[idx].set_title(k,fontdict={'fontsize':4})
+            idx += 1
+        set_plt_img(fig,f"{opt.out_path}/{path.split('.')[0]}",img_size_r=img.shape[0]*idx,img_size_c=img.shape[1]*idx)
