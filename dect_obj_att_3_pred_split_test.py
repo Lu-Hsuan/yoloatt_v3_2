@@ -149,7 +149,7 @@ def save_img(save_path,img):
     cv2.imwrite(f'{save_path}.png',img)
 
 def set_plt_img(fig,save_path,img_size_r=480,img_size_c=640):
-    fig.set_size_inches(img_size_r/400.,img_size_c/400.)
+    fig.set_size_inches(img_size_c/400.,img_size_r/400.)
     plt.gca().xaxis.set_major_locator(plt.NullLocator())
     plt.gca().yaxis.set_major_locator(plt.NullLocator())
     plt.subplots_adjust(top=1,bottom=0,left=0,right=1,hspace=0,wspace=0)
