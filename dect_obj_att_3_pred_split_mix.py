@@ -166,7 +166,25 @@ def tar2dec(target_gt):
     target_gt_[:,0:4] = target_gt[:,1:]
     target_gt_[:,-1] = target_gt[:,0]
     return target_gt_
+def sal_obj_value(tar,dec,shape_r=480,shape_c=640):
+    if(tar is not None and dec is not None):
+        tar[0] /= shape_c
+        tar[2] /= shape_c
+        tar[1] /= shape_r
+        tar[3] /= shape_r
+        tar_xy = tar[0:4]
 
+        dec[0] /= shape_c
+        dec[2] /= shape_c
+        dec[1] /= shape_r
+        dec[3] /= shape_r
+        dec_xy = dec[0:4]
+        val = torch.dot(tar_xy,dec_xy)/(torch.norm(tar_xy,p=2)*torch.norm(dec_xy,p=2))
+        print('dot : ',val**2)
+        return (val**2).cpu().numpy()
+    else:
+        print('tar or dec None')
+        return 0
 if __name__ == "__main__":
     torch.backends.cudnn.deterministic =True
     parser = argparse.ArgumentParser()
@@ -208,7 +226,7 @@ if __name__ == "__main__":
         dataset, batch_size=opt.batch_size, shuffle=False, num_workers=8)
     print("\nPerforming object detection:")
     prev_time = time.time()
-    init = 0
+    init = 100
     print('load '+opt.weights_path)
     model = Darknet(opt.model_def).to(device)
     model.eval()
@@ -240,7 +258,7 @@ if __name__ == "__main__":
         std_p_list.extend(list(std[:,...]))
         std_g_list.extend(list(std_g[:,...]))
         # Save image and detections
-        if(batch_i == 10+init):
+        if(batch_i == 4+init):
             break
     # try:
     #     os._exit(0)
@@ -259,6 +277,7 @@ if __name__ == "__main__":
 
     print("\nSaving images:")
     # Iterate through images and save plot of detections
+    val_list = []
     for img_i, (path,detections,map_p,std_p,map_g,std_g) in enumerate(zip(imgs,img_detections,map_p_list,std_p_list,map_g_list,std_g_list)):
 
         print("(%d) Image: '%s'" % (img_i, path))
@@ -311,8 +330,8 @@ if __name__ == "__main__":
         if(pre_obj is not None and detections is not None):
             
             draw_obj_box(detections,ax,colors,classes,pre_obj=pre_obj,area_mean=True,mean_=map_p,std_=std_p)
-            pre_obj = pre_obj.cpu().numpy()
-            np.save(f'{save_p}/sal_obj_pred.npy',pre_obj)
+            pre_obj_np = pre_obj.cpu().numpy()
+            np.save(f'{save_p}/sal_obj_pred.npy',pre_obj_np)
         set_plt_img(fig,f'{save_p}/yoloatt_salobj_pred',img_size_r=img.shape[0],img_size_c=img.shape[1])
         #FOR PREDICT###########################
 
@@ -335,7 +354,7 @@ if __name__ == "__main__":
             target_gt[:,4] = y2
             target_gt = tar2dec(target_gt)
 
-            pre_obj,max_x,max_y,area_max_mean,area_min_std = find_max(map_g,std_p,target_gt)
+            GT_obj,max_x,max_y,area_max_mean,area_min_std = find_max(map_g,std_p,target_gt)
             draw_obj_box(target_gt,ax,colors,classes,area_mean=True,mean_=map_g,std_=std_g)
         else:
             _,max_x,max_y,_,_ = find_max(map_g,std_g,detections)
@@ -344,13 +363,19 @@ if __name__ == "__main__":
         fig, ax = plt.subplots()
         ax.imshow(img)
         ax.axis('off')
-        if(pre_obj is not None and target_gt is not None):
+
+        
+        if(GT_obj is not None and target_gt is not None):
             
-            draw_obj_box(target_gt,ax,colors,classes,pre_obj=pre_obj,area_mean=True,mean_=map_g,std_=std_g)
-            pre_obj = pre_obj.cpu().numpy()
-            np.save(f'{save_p}/sal_obj_GT.npy',pre_obj)
+            draw_obj_box(target_gt,ax,colors,classes,pre_obj=GT_obj,area_mean=True,mean_=map_g,std_=std_g)
+            GT_obj_np = GT_obj.cpu().numpy()
+            np.save(f'{save_p}/sal_obj_GT.npy',GT_obj_np)
         set_plt_img(fig,f'{save_p}/salobj_GT',img_size_r=img.shape[0],img_size_c=img.shape[1])
         #FOR GT################################
+        val = sal_obj_value(GT_obj,pre_obj)
+        val_list.append(val)
+        with open(f"{opt.out_path}/value.txt", 'a+') as out_file:
+            out_file.writelines(f'{path}  Value:{float(val):.4f}\n')
 
         if(opt.show_all == True):
             img_obj = np.array(Image.open(f'{save_p}/yoloatt_obj_pred.png'))
@@ -384,10 +409,10 @@ if __name__ == "__main__":
                 ax[idx].set_title(k,fontdict={'fontsize':4})
                 idx += 1
             set_plt_img(fig,f"{save_p}/{path.split('.')[0]}_GT",img_size_r=img.shape[0]*idx,img_size_c=img.shape[1]*idx)
-            time.sleep(0.01)
+            #time.sleep(0.01)
 
-            img_GT = np.array(Image.open(f"{save_p}/{path.split('.')[0]}_GT.png"))
             img_Pred = np.array(Image.open(f"{save_p}/{path.split('.')[0]}_pred.png"))
+            img_GT = np.array(Image.open(f"{save_p}/{path.split('.')[0]}_GT.png"))
             fig, ax = plt.subplots(nrows=2,num='Total')
             img_dic = {'img_GT':img_GT,'img_Pred':img_Pred}
             idx = 0
@@ -398,8 +423,13 @@ if __name__ == "__main__":
                     #ax[idx].plot(max_x.cpu(),max_y.cpu(),'ro',markersize=1)
                 else:
                     ax[idx].imshow(v)
-                ax[idx].set_title(k,fontdict={'fontsize':4})
+                ax[idx].set_title(f'{k}_Value:{float(val):.4f}',fontdict={'fontsize':4})
                 idx += 1
             set_plt_img(fig,f"{opt.out_path}/{path.split('.')[0]}",img_size_r=img_GT.shape[0]*2.3,img_size_c=img_GT.shape[1])
             
-
+    val_list = np.array(val_list)
+    tot_val = np.mean(val_list)
+    print('Metric')
+    with open(f"{opt.out_path}/value.txt", 'a+') as out_file:
+        out_file.writelines(f'total  Value:{float(tot_val):.4f}\n')
+    print('total Val : ',tot_val)
