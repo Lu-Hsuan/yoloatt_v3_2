@@ -139,6 +139,7 @@ class generator_SAL_metric(Dataset):
         self.data_num = len(self.file_)
         self.padding = padding
         self.show_pad = show_pad
+        self.std_need = std_need
         if(self.padding == False):
             self.transform_i = transforms.Compose([ 
                             transforms.ToPILImage(),
@@ -189,7 +190,7 @@ class generator_SAL_metric(Dataset):
                 fix_i, pad = pad_to_square(fix_i, 0)
                 fix_i = resize(fix_i, [self.shape_r,self.shape_c])
                 return img_i,map_i,fix_i,img_nr
-        if(std_need==False):
+        if(self.std_need==False):
             return img_i,map_i/255.,fix_i/255.,img_nr
         else:
             cells_file_temp = np.load(os.path.join(self.cell_p, str(3), img_nr + '.npy'))
