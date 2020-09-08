@@ -119,7 +119,7 @@ class SALCell_Dataset(Dataset):
 
 class generator_SAL_metric(Dataset):
     
-    def __init__(self,data_path, phase, shape_r, shape_c,padding=False,show_pad=False,file_list=None):
+    def __init__(self,data_path, phase, shape_r, shape_c,padding=False,show_pad=False,file_list=None,std_need=False):
         self.phase = phase
         self.shape_r = shape_r
         self.shape_c = shape_c
@@ -189,8 +189,13 @@ class generator_SAL_metric(Dataset):
                 fix_i, pad = pad_to_square(fix_i, 0)
                 fix_i = resize(fix_i, [self.shape_r,self.shape_c])
                 return img_i,map_i,fix_i,img_nr
-
-        return img_i,map_i/255.,fix_i/255.,img_nr
+        if(std_need==False):
+            return img_i,map_i/255.,fix_i/255.,img_nr
+        else:
+            cells_file_temp = np.load(os.path.join(self.cell_p, str(3), img_nr + '.npy'))
+            std_i = cells_file_temp[1,...]
+            std_i = cv2.resize(std_i,(map_i.shape[1],map_i.shape[0]))
+            return img_i,map_i/255.,fix_i/255.,std_i,img_nr
     def __len__(self):
         ##############################################
         ### Indicate the total size of the dataset

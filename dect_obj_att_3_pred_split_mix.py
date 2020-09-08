@@ -198,11 +198,12 @@ if __name__ == "__main__":
     map_p_list = []
     map_g_list = []
     std_p_list = []
+    std_g_list = []
     pre_obj = None
 
     in_shape_r,in_shape_c = 224,320
     #tar_shape_r,tar_shape_c = 480,640
-    dataset = dataset = generator_SAL_metric(opt.data_path,"val",in_shape_r,in_shape_c,file_list='../data/common_sal.txt')
+    dataset = dataset = generator_SAL_metric(opt.data_path,"val",in_shape_r,in_shape_c,file_list='../data/common_sal.txt',std_need=True)
     dataloader = torch.utils.data.DataLoader(
         dataset, batch_size=opt.batch_size, shuffle=False, num_workers=8)
     print("\nPerforming object detection:")
@@ -212,7 +213,7 @@ if __name__ == "__main__":
     model = Darknet(opt.model_def).to(device)
     model.eval()
     model.load_state_dict(torch.load(opt.weights_path))
-    for batch_i, (input_imgs,map_g,_,img_paths) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
+    for batch_i, (input_imgs,map_g,_,std_g,img_paths) in enumerate(tqdm.tqdm(dataloader, desc="Detecting objects")):
         if(batch_i < init):
             continue
         input_imgs = Variable(input_imgs.type(Tensor))
@@ -237,6 +238,7 @@ if __name__ == "__main__":
         map_p_list.extend(list(out[:,...]))
         map_g_list.extend(list(map_g[:,...]))
         std_p_list.extend(list(std[:,...]))
+        std_g_list.extend(list(std_g[:,...]))
         # Save image and detections
         if(batch_i == 10+init):
             break
@@ -257,7 +259,7 @@ if __name__ == "__main__":
 
     print("\nSaving images:")
     # Iterate through images and save plot of detections
-    for img_i, (path,detections,map_p,std_p,map_g) in enumerate(zip(imgs,img_detections,map_p_list,std_p_list,map_g_list)):
+    for img_i, (path,detections,map_p,std_p,map_g,std_g) in enumerate(zip(imgs,img_detections,map_p_list,std_p_list,map_g_list,std_g_list)):
 
         print("(%d) Image: '%s'" % (img_i, path))
         save_p = f"{opt.out_path}/ident/{path.split('.')[0]}"
@@ -280,6 +282,7 @@ if __name__ == "__main__":
         save_img(f'{save_p}/map_Pred',map_ps)
         save_img(f'{save_p}/map_GT',map_g.cpu().numpy())
         save_img(f'{save_p}/std_Pred',std_p.cpu().numpy())
+        save_img(f'{save_p}/std_GT',std_g.cpu().numpy())
         cv2.imwrite(f'{save_p}/img.png',cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
 
         #FOR PREDICT###########################
@@ -333,9 +336,9 @@ if __name__ == "__main__":
             target_gt = tar2dec(target_gt)
 
             pre_obj,max_x,max_y,area_max_mean,area_min_std = find_max(map_g,std_p,target_gt)
-            draw_obj_box(target_gt,ax,colors,classes,area_mean=True,mean_=map_g,std_=std_p)
+            draw_obj_box(target_gt,ax,colors,classes,area_mean=True,mean_=map_g,std_=std_g)
         else:
-            _,max_x,max_y,_,_ = find_max(map_g,std_p,detections)
+            _,max_x,max_y,_,_ = find_max(map_g,std_g,detections)
         set_plt_img(fig,f'{save_p}/obj_GT',img_size_r=img.shape[0],img_size_c=img.shape[1])
         
         fig, ax = plt.subplots()
@@ -343,7 +346,7 @@ if __name__ == "__main__":
         ax.axis('off')
         if(pre_obj is not None and target_gt is not None):
             
-            draw_obj_box(target_gt,ax,colors,classes,pre_obj=pre_obj,area_mean=True,mean_=map_g,std_=std_p)
+            draw_obj_box(target_gt,ax,colors,classes,pre_obj=pre_obj,area_mean=True,mean_=map_g,std_=std_g)
             pre_obj = pre_obj.cpu().numpy()
             np.save(f'{save_p}/sal_obj_GT.npy',pre_obj)
         set_plt_img(fig,f'{save_p}/salobj_GT',img_size_r=img.shape[0],img_size_c=img.shape[1])
