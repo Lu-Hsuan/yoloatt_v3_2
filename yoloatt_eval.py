@@ -76,7 +76,7 @@ class Tester:
                 #print(map_p.shape,map_g.shape,fix_g.shape)
                 for k in range(N):
                     #map_p_ = cv2.resize(map_p[k], (fix_.shape[-1], fix_.shape[-2]),interpolation=cv2.INTER_LINEAR)
-                    #self.Metric_['AUC_J'] += auc_judd(map_p[k],fix_g[k])
+                    self.Metric_['AUC_J'] += auc_judd(map_p[k],fix_g[k])
                     #self.Metric_['s-AUC'] += auc_shuff_acl(map_p[k],fix_g[k],next(self.o_g))
                     self.Metric_['NSS'] += nss(map_p[k],fix_g[k])
                     self.Metric_['SIM'] += similarity(map_p[k],map_g[k])
