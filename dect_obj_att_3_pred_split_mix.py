@@ -226,7 +226,7 @@ if __name__ == "__main__":
         dataset, batch_size=opt.batch_size, shuffle=False, num_workers=8)
     print("\nPerforming object detection:")
     prev_time = time.time()
-    init = 100
+    init = 20
     print('load '+opt.weights_path)
     model = Darknet(opt.model_def).to(device)
     model.eval()
@@ -258,7 +258,7 @@ if __name__ == "__main__":
         std_p_list.extend(list(std[:,...]))
         std_g_list.extend(list(std_g[:,...]))
         # Save image and detections
-        if(batch_i == 4+init):
+        if(batch_i == 10+init):
             break
     # try:
     #     os._exit(0)
@@ -381,7 +381,7 @@ if __name__ == "__main__":
             img_obj = np.array(Image.open(f'{save_p}/yoloatt_obj_pred.png'))
             img_salobj = np.array(Image.open(f'{save_p}/yoloatt_salobj_pred.png'))
             fig, ax = plt.subplots(ncols=4,num='Total')
-            img_dic = {'img':img,'obj_pred':img_obj,'salobj_pred':img_salobj,'map_pred':map_p.cpu()}
+            img_dic = {'img':img,'obj_pred':img_obj,'map_pred':map_p.cpu(),'salobj_pred':img_salobj}
             idx = 0
             for k,v in img_dic.items():
                 ax[idx].axis('off')
@@ -397,7 +397,7 @@ if __name__ == "__main__":
             img_obj = np.array(Image.open(f'{save_p}/obj_GT.png'))
             img_salobj = np.array(Image.open(f'{save_p}/salobj_GT.png'))
             fig, ax = plt.subplots(ncols=4,num='Total')
-            img_dic = {'img':img,'obj_GT':img_obj,'salobj_GT':img_salobj,'map_GT':map_g.cpu()}
+            img_dic = {'img':img,'obj_GT':img_obj,'map_GT':map_g.cpu(),'salobj_GT':img_salobj}
             idx = 0
             for k,v in img_dic.items():
                 ax[idx].axis('off')
@@ -413,9 +413,11 @@ if __name__ == "__main__":
 
             img_Pred = np.array(Image.open(f"{save_p}/{path.split('.')[0]}_pred.png"))
             img_GT = np.array(Image.open(f"{save_p}/{path.split('.')[0]}_GT.png"))
-            fig, ax = plt.subplots(nrows=2,num='Total')
-            img_dic = {'img_GT':img_GT,'img_Pred':img_Pred}
+            fig, ax = plt.subplots(nrows=1,num='Total')
+            #img_dic = {'img_GT':img_GT,'img_Pred':img_Pred}
+            img_dic = {'img_Pred':img_Pred}
             idx = 0
+            ax = [ax]
             for k,v in img_dic.items():
                 ax[idx].axis('off')
                 if('map' in k):
@@ -423,9 +425,10 @@ if __name__ == "__main__":
                     #ax[idx].plot(max_x.cpu(),max_y.cpu(),'ro',markersize=1)
                 else:
                     ax[idx].imshow(v)
-                ax[idx].set_title(f'{k}_Value:{float(val):.4f}',fontdict={'fontsize':4})
+                #ax[idx].set_title(f'{k}_Value:{float(val):.4f}',fontdict={'fontsize':4})
+                ax[idx].set_title(f'{k}',fontdict={'fontsize':4})
                 idx += 1
-            set_plt_img(fig,f"{opt.out_path}/{path.split('.')[0]}",img_size_r=img_GT.shape[0]*2.3,img_size_c=img_GT.shape[1])
+            set_plt_img(fig,f"{opt.out_path}/{path.split('.')[0]}",img_size_r=img_Pred.shape[0],img_size_c=img_Pred.shape[1])
             
     val_list = np.array(val_list)
     tot_val = np.mean(val_list)

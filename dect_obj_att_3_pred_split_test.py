@@ -290,7 +290,7 @@ if __name__ == "__main__":
         img_obj = np.array(Image.open(f'{save_p}/yoloatt_obj_pred.png'))
         img_salobj = np.array(Image.open(f'{save_p}/yoloatt_salobj_pred.png'))
         fig, ax = plt.subplots(ncols=4,num='Total')
-        img_dic = {'img':img,'obj_pred':img_obj,'salobj_pred':img_salobj,'map_pred':map_p.cpu()}
+        img_dic = {'img':img,'obj_pred':img_obj,'map_pred':map_p.cpu(),'salobj_pred':img_salobj}
         idx = 0
         for k,v in img_dic.items():
             ax[idx].axis('off')
