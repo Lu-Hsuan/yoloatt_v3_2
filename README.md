@@ -14,5 +14,5 @@
 
 ## Saliency Object Example
 ---
-![method5_Salobj](https://github.com/Lu-Hsuan/Saliency-object-Detection/blob/master/output_method2/COCO_val2014_000000000164.png)
+![method5_Salobj](https://github.com/Lu-Hsuan/yoloatt_v3_2/blob/master/img_example/sal_obj_test%203_ch.png)
   
