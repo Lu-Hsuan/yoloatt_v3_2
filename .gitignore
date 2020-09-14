@@ -4,6 +4,7 @@
 *.zip
 *.rar
 *.cpython-36.pyc
+*.sh
 newcode/*
 /model_2_version/*
 /!img/*
