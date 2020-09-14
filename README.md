@@ -13,7 +13,12 @@
   
 ### Predict and save test img on yoloatt 
     python -u dect_obj_att_3_pred_split_test.py --data_path=img_data_path --out_path=img_save_path --weight=weight.pth --batch_size=batch_size
-
+  
+### Code memo
+  * TODO
+  * TODO
+  
+  
 ## Saliency Object Example
 ---
 ![method5_Salobj](https://github.com/Lu-Hsuan/yoloatt_v3_2/blob/master/img_example/sal_obj_test%203_ch.png)
