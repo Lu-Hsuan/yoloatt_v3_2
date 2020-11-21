@@ -17,7 +17,10 @@
 ### Code memo
   * TODO
   * TODO
-  
+### Data & weight
+[Goole drive](https://drive.google.com/drive/folders/1s-xrGMb26etWnLVvbrngF0eKq3FvAbth?usp=sharing)    
+    Please change your path    
+    init path is : '../data'
   
 ## Saliency Object Example
 ---
