@@ -1,0 +1,1 @@
+./epoch_yolos_frozen_2_cos_nonth/yoloatt/model/weight_6/yoloatt_v3_1.pth
