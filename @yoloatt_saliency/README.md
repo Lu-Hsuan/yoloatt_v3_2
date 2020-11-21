@@ -1,4 +1,4 @@
-# Saliency-object-Detection
+# Saliency-Detection
   
 ## yoloatt_saliency
   
@@ -6,7 +6,7 @@
     python yoloatt_train.py --data_path=data_path --weight=weight_path --log_path=output_path --batch_size=batch_size --epochs=epochs
   
 ### Evaluate yoloatt saliency map metrics
-   python yoloatt_eval.py --data_path=data_path --weight=weight_path --log_path=output_path
+    python yoloatt_eval.py --data_path=data_path --weight=weight_path --log_path=output_path
    
 ### Predict and save img on yoloatt 
     python yoloatt_test.py --data_path=data_path --weight=weight_path --log_path=output_path
