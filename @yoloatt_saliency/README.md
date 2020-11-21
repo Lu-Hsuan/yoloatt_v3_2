@@ -22,7 +22,11 @@
     Please change your path    
     init path is : './data'
   
-## Saliency Object Example
+## Saliency  Example
 ---
-![method5_Salobj](https://github.com/Lu-Hsuan/yoloatt_v3_2/blob/master/img_example/sal_obj_test%203_ch.png)
+### data preprocess
+![mean_std](https://github.com/Lu-Hsuan/yoloatt_v3_2/blob/master/%40yoloatt_saliency/!ex_img/mean_std_2_f.png)
+---
+### Predict example
+![example](https://github.com/Lu-Hsuan/yoloatt_v3_2/blob/master/%40yoloatt_saliency/!ex_img/mean_std_example_nomean_2.png)
   
