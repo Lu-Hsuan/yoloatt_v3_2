@@ -34,7 +34,7 @@ class Tester:
                                 num_workers=self.opt.num_workers)
 
         self.tot_N = self.val_g.data_num
-        self.g = generator_SAL('val',self.opt.height,self.opt.width,self.opt.batch_size)
+        self.g = generator_SAL('val',self.opt.height,self.opt.width,self.opt.batch_size,data_path=self.opt.data_path)
         self.o_g = other_maps(self.g,10,self.tar_shape_r,self.tar_shape_c)
         self.Metric_ = {'AUC_J':0.0,'SIM':0.0,'s-AUC':0.0,'CC':0.0,'NSS':0.0,'KL':0.0}
         self.writer = {}

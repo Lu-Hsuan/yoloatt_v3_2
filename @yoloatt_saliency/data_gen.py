@@ -13,7 +13,7 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
 class generator_SAL:
-    def __init__(self,phase,shape_r,shape_c,batch_size,data_path='../train_backbone'):
+    def __init__(self,phase,shape_r,shape_c,batch_size,data_path='./data'):
         self.phase = phase
         self.shape_r = shape_r
         self.shape_c = shape_c
@@ -116,7 +116,7 @@ class generator_SAL_torch(Dataset):
         return self.data_num
 
 class generator_SAL_metric(Dataset):
-    def __init__(self,phase,shape_r,shape_c,tar_shape_r=480,tar_shape_c=640,data_path='../train_backbone'):
+    def __init__(self,phase,shape_r,shape_c,tar_shape_r=480,tar_shape_c=640,data_path='./data'):
         self.phase = phase
         self.shape_r = shape_r
         self.shape_c = shape_c

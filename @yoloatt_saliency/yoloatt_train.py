@@ -195,8 +195,7 @@ class Trainer:
                 self.model.load_darknet_weights("./weights/darknet53.conv.74")
         else:
             print(f"Load Model from {self.opt.weight}")
-            self.model.load_state_dict(torch.load(os.path.join(self.opt.weight, "yoloatt.pth")))
-            self.model_optimizer.load_state_dict(torch.load(os.path.join(self.opt.weight, "adam.pth")))
+            self.model.load_state_dict(torch.load(self.opt.weight))
 
 if __name__ == '__main__':
 
