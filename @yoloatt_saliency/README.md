@@ -8,7 +8,7 @@
 ### Evaluate yoloatt saliency map metrics
     python yoloatt_eval.py --data_path=data_path --weight=weight_path --log_path=output_path
    
-### Predict and save img on yoloatt 
+### Predict and save npy on yoloatt 
     python yoloatt_test.py --data_path=data_path --weight=weight_path --log_path=output_path
     
 ### Predict and save img on yoloatt 
